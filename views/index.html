@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <link rel="apple-touch-icon" sizes="120x120" href="./assets/images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" href="./assets/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./assets/images/favicon-16x16.png" sizes="16x16">
+    <link rel="manifest" href="manifest">
+    <!-- <link rel="manifest" href="public/manifest.json" /> -->
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="Find the nearest Masjid, find local masjids near to you, find masjids by location, at any time wherever you are, when its time for salaah, never miss a prayer in congregation">
+    <meta name="keywords"
+        content="masjid near me, Find mosques, mosques, local mosque,find masjed, masjid, masjids, prayer times, islam, islamic, pray, namaaz, salaah, mosque, five times, مسجد, near, location, map, navigate, masaajid, obligatory, congregation namaaz, salaah, never miss your salaah, fardh">
+    <title>مساجد</title>
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="styles/style.css">
+    <link rel="stylesheet" href="styles/timings.css">
+    <link rel="stylesheet" href="styles/flmnu.css">
+    <link rel="stylesheet" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="styles/bootstrap-theme.css">
+    <link rel="stylesheet" href="styles/bootstrap-clockpicker.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM=" crossorigin=""></script>
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"
+        integrity="sha512-cUoWMYmv4H9TGP4hbm1mIjYo90WzIQFo/5jj+P5tQcDTf+iVR59RyIj/a9fRsBxzxt5Dnv/Ex7MzRIxcDwaOLw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="scripts/leaflet.awesome-markers.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"
+        integrity="sha512-3j3VU6WC5rPQB4Ld1jnLV7Kd5xr+cq9avvhwqzbH/taCRNURoeEpoPBK9pDyeukwSxwRPJ8fDgvYXd6SkaZ2TA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <style>
+        #map {
+            height: calc(100vh - 0px)
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 0px;
+        }
+
+        .leaflet-popup-content {
+            margin: 2px;
+            border-radius: 0px
+        }
+    </style>
+</head>
+
+<body>
+    <!--[if lt IE 7]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    <div id="alertMsg"></div>
+    <div class="alert alert-danger fade in noselect" style="position: absolute;width:45%;display:none">
+        <strong>Error!</strong>
+        <div id="errorDiv"></div>
+    </div>
+    <!-- Navigation -->
+    <div class="navbar navbar-inverse navbar-fixed-top headroom">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- Button for smallest screens -->
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand">
+                    <img src="./assets/images/logo_N.png" />
+                </a>
+            </div>
+            <div class="navbar-collapse collapse" id="mnuCollapse">
+                <ul class="nav navbar-nav pull-right">
+                    <li><a id="btnLoc" class="btn-loc"><span class="glyphicon glyphicon-map-marker"
+                                style="margin-top:-2px;" data-toggle="tooltip" data-placement="bottom"
+                                title="Location"></span></a></li>
+                    <li id="lilogin"><a id="btnLogin" style="cursor:default"><span class="glyphicon glyphicon-user"
+                                style="margin-top:-2px;" title="sign in" data-toggle="tooltip"
+                                data-placement="bottom"></span></a></li>
+                    <li class="dropdown" style="display:none" id="liUser">
+                        <a id="btnLoginUser" class="dropdown-toggle" data-toggle="dropdown"><span
+                                class="glyphicon glyphicon-user"></span><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a id="navUserSettings">Settings</a></li>
+                            <li><a id="navUserProfile">Profile</a></li>
+                            <li><a id="navUserLogOut">SignOut</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown"><a id="btnDev" class="dropdown-toggle" data-toggle="dropdown"><span
+                                class="glyphicon glyphicon-cog"></span><span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/devs" target="_blank">Developers</a></li>
+                            <!-- <li><a href="~/Projects/Home">Projects</a></li>s -->
+                            <li><a href="/help" target="_blank">Help</a></li>
+                            <!-- <li><a href="~/Legal/Home/Web">Legal</a></li> -->
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+    <!-- /.navbar -->
+    <div id="loader" class="alert alert-masjid noselect"
+        style="display:block;position:absolute;z-index:2000;top: 32%;left: calc(40% + 42px);">Loading <span
+            class="colorAnim">🌙 </span>
+    </div>
+    <div id="timings"></div>
+    <div id="mnu"></div>
+    <div id="map"></div>
+    <div id="infoWidget"></div>
+    <div id="shareMnu" class="flmnu" style="position: fixed;display:none;"></div>
+    <div id="userRole" style="display:none"></div>
+
+    <!-- Modal loginModal-->
+    <div class="modal fade" id="loginModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="loginModalTitle">Sign in</h4>
+                </div>
+                <div class="modal-body" id="loginBody">
+                    <div class="alert alert-danger" id="validationMsg" hidden></div>
+                    <fieldset id="loginFrm">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-12" style="Padding-bottom:3px">
+                                    <input type="email" class="form-control" placeholder="Enter your email"
+                                        required="true" autofocus value="" id="userEmail" />
+                                </div>
+                                <div class="col-xs-12" style="Padding-bottom:3px">
+                                    <input type="password" class="form-control" placeholder="Enter your Password"
+                                        required="true" value="" id="userPwd" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-8">
+                                </div>
+                                <div class="col-xs-4" style="Padding-bottom:3px">
+                                    <button class="btn btn-masajid  pull-right" id="btnSignIn">Sign
+                                        in</button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-12" style="text-align:right;padding-right:26px">
+                                    <a id="btnForgotPwd" style="cursor:default">Forgot
+                                        password?</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a id="btnReg" style="cursor:default">Sign up</a>
+                                </div>
+                            </div>
+                        </form>
+                    </fieldset>
+                    <fieldset id="registerFrm" hidden>
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <div class="col-xs-12" style="Padding-bottom:3px">
+                                    <input type="email" class="form-control" placeholder="Enter your email"
+                                        required="true" autofocus="true" value="" id="regUserEmail" />
+                                </div>
+                                <div class="col-xs-12" style="Padding-bottom:3px">
+                                    <input type="password" class="form-control" placeholder="Enter your Password"
+                                        required="true" value="" id="regUserPwd" />
+                                </div>
+                                <div class="col-xs-12" style="Padding-bottom:3px">
+                                    <input type="password" class="form-control" placeholder="Re-Enter your password"
+                                        required="true" value="" id="regComparePassword" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-6" style="Padding-bottom:3px">
+                                    <input type="text" class="form-control" placeholder="First Name" required="true"
+                                        autofocus="true" value="" id="firstName" />
+                                </div>
+                                <div class="col-xs-6" style="Padding-bottom:3px">
+                                    <input type="text" class="form-control" placeholder="Last Name" required="true"
+                                        value="" id="lastName" />
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-xs-5">
+                                    <br />
+                                    <a id="btnlogin" style="cursor:default">&lt;&lt;</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button class="btn btn-masajid  pull-right" id="btnRegister">Sign
+                                        up</button>
+                                </div>
+                            </div>
+                        </form>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal location modal-->
+    <div class="modal fade" id="locModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="locTitle">Set your location</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Type in your location </p>
+                    <input type="text" id="txtLocation" class="form-control input-sm" autofocus />
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn btn-masajid" data-dismiss="modal" onclick="resetLoc()">Submit</button> -->
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal send  Verification email -->
+    <div class="modal fade" id="sendVerificationModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <!-- <h4 class="modal-title">Please verify your email</h4> -->
+                </div>
+                <div class="modal-body">
+                    <div id="sendVerificationMessage"></div>
+                    <div>Or, send a verification mail to your account now, and use the link sent in the email to verify
+                        yourself.
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="display:none" id="confirmCode"></div>
+                    <div style="display:none" id="email"></div>
+                    <button type="button" class="btn btn-masajid" id="btnSendVerification">Send</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal Edit/Verify masjid -->
+    <div class="modal fade" id="editMasjidModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="editMasjidMasjidName">Editing</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-12" style="padding-bottom:3px;">
+                            <input id="txtMasjidName" type="text" class="form-control" placeholder="Masjid Name" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="padding-bottom:3px;margin-left:12px" id="verifyMessage">
+                            Please be very sure that ths is a place of Salaah. <br>If you have visited and/or know about
+                            this place, <br>then verify so that the detail and salaah times can be updated.
+                        </div>
+                        <div class="col-xs-12" style="padding-bottom:3px;" id="notMasjdCheck">
+                            <span>This is not a masjid?&nbsp;&nbsp;&nbsp;<input id="chkIsNotMasjid"
+                                    type="checkbox" /></span>
+                        </div>
+                        <div id="notMasjidMessage" style="display:none;padding-bottom:3px;margin-left:27px">Please be
+                            very sure this is not a masjid<br> By marking this as not a
+                            masjid, it will not show up on the map</div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="padding-bottom:3px;">
+                            <textarea rows="2" id="description" name="txtMasjidDescription" type="text"
+                                class="form-control" placeholder="Short description of the masjid"></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="padding-bottom:3px;">
+                            <input id="street" type="text" class="form-control" placeholder="Street" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="padding-bottom:3px;">
+                            <input id="locality" type="text" class="form-control" placeholder="Locality" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6" style="padding-right:2px;padding-bottom:3px;">
+                            <input id="zipcode" type="text" class="form-control" placeholder="zip/pin Code" />
+                        </div>
+                        <div class="col-xs-6" style="padding-left:2px;padding-bottom:3px;">
+                            <input id="city" type="text" class="form-control" placeholder="City" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6" style="padding-right:2px;padding-bottom:3px;">
+                            <input id="state" type="text" class="form-control" placeholder="State" />
+                        </div>
+                        <div class="col-xs-6" style="padding-left:2px;padding-bottom:3px;">
+                            <input id="country" type="text" class="form-control" placeholder="Country" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="padding-bottom:3px;">
+                            <input id="phone" type="text" class="form-control" placeholder="Phone (contact number)" />
+                        </div>
+                    </div>
+                    <!--           <div class="row">
+                <div class="col-xs-12">
+                  <input id="txtMasjidAddressgooglePlaceId" type="text" class="form-control" placeholder="Place ID" disabled/>
+                </div>
+              </div> -->
+                </div>
+                <div class="modal-footer">
+                    <div style="display:none" id="masjidId"></div>
+                    <button type="button" id="btnUpdateMasjid" class="btn btn-masajid  pull-right">Update</button>
+                    <button type="button" id="btnVerifyMasjid" class="btn btn-masajid  pull-right">Verify</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit salaah times -->
+    <div class="modal fade" id="editTimesModal" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title" id="editSalaahtimesHeader">Editing</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="input-group clockpicker" data-autoclose="true">
+                                <input type="text" id="fajrVal" class="form-control" value="" placeholder="Fajr"
+                                    disabled style="background-color:#fff" />
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-group clockpicker" data-placement="bottom" data-align="right"
+                                data-autoclose="true">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                                <input type="text" id="zuhrVal" class="form-control" value="" placeholder="Zuhr"
+                                    disabled style="background-color:#fff">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="input-group clockpicker" data-autoclose="true">
+                                <input type="text" id="asrVal" class="form-control" value="" placeholder="Asr" disabled
+                                    style="background-color:#fff">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-group" data-placement="bottom" data-align="right" data-autoclose="true">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time" style="color:#ccc"></span>
+                                </span>
+                                <input type="text" id="maghribVal" class="form-control" value="" placeholder="Maghrib"
+                                    disabled style="background-color:#fff">
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-6">
+                            <div class="input-group clockpicker" data-autoclose="true">
+                                <input type="text" id="ishaVal" class="form-control" value="" placeholder="Isha"
+                                    disabled style="background-color:#fff">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="input-group clockpicker" data-placement="bottom" data-align="right"
+                                data-autoclose="true">
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
+                                <input type="text" id="jumahVal" class="form-control" value="" placeholder="Jumah"
+                                    disabled style="background-color:#fff">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <div style="display:none" id="masjidId"></div>
+                    <button type="button" id="btnUpdateSalaahTimes" class="btn btn-masajid  pull-right">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Settings-->
+    <div class="modal fade" id="settingsModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Settings</h4>
+                </div>
+                <div class="modal-body" id="settingsBody">
+                    <div class="row" style="border-bottom:1px solid #CCC;padding:9px">
+                        <div class="col-xs-2"></div>
+                        <div class="col-xs-4"><label>Search Radius</label></div>
+                        <div class="col-xs-4">
+                            <select id="searchRadius" class="form-control">
+                                <option value="1000">1 Km</option>
+                                <option value="2000">2 Km</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-2"></div>
+                    </div>
+                    <div class="row" style="border-bottom:1px solid #CCC;padding:9px">
+                        <div class="col-xs-1"></div>
+                        <div class="col-xs-3  text-left">
+                            <label>Asr time setting</label>
+                        </div>
+                        <div class="col-xs-3 text-left">
+                            <!-- 1 hanfi 0 shafi -->
+                            <input type='radio' name='school' value='1' />&nbsp;<b>Hanfi</b>
+                        </div>
+                        <div class="col-xs-3 text-left">
+                            <input type='radio' name='school' value='0' />&nbsp;<b>Shafi</b>
+                        </div>
+                        <div class="col-xs-1"></div>
+                    </div>
+                    <div class="row" style="border-bottom:1px solid #CCC;padding:9px">
+                        <div class="col-xs-12">
+                            <label>Set calculation method for salaah timings</label>
+                        </div>
+                        <div class="col-xs-12">
+                            <select id="calcMethod" class="form-control">
+                                <option value=1>University of Islamic Sciences, Karachi</option>
+                                <option value=2>ISNA-Islamic Society of North America</option>
+                                <option value=3>MWL-Muslim World League</option>
+                                <option value=4>Umm al-Qura, Makkah</option>
+                                <option value=5>Egyptian General Authority of Survey</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <!-- <button type="button" class="btn-masajid" data-dismiss="modal"
+                        onclick="$('#imgLocationLoader').hide();">Cancel</button>
+                    &nbsp;&nbsp;&nbsp;&nbsp; -->
+                    <button type="button" class="btn btn-masajid  pull-right" data-dismiss="modal"
+                        id="btnSaveSettings">Save</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal profile-->
+    <div class="modal fade" id="profileModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content" id="accountContent">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">x</button>
+                    <h4 class="modal-title"> Your account</h4>
+                </div>
+                <div class="modal-body" style=" max-height: 420px; overflow-y: auto;">
+                    <div class="row">
+                        <div class="col-xs-12" style="Padding-bottom: 3px">
+                            <input id="userId" name="userId" type="hidden" value="7c1c1400-855c-498e-b1fc-8f2b1c479610">
+                            <input id="userProfile_userEmail" type="email" class="form-control"
+                                placeholder="Enter your email" readonly />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3" style="Padding-bottom: 3px">
+
+                            <label>First name:</label>
+                        </div>
+                        <div class="col-xs-9" style="Padding-bottom: 3px">
+                            <input id="userProfile_firstName" type="text" class="form-control"
+                                placeholder="Enter your first name" required="True" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3" style="Padding-bottom: 3px">
+                            <label>Last name:</label>
+                        </div>
+                        <div class="col-xs-9" style="Padding-bottom: 3px">
+                            <input id="userProfile_lastName" type="text" class="form-control"
+                                placeholder="Enter your last name" required="True" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3" style="Padding-bottom: 3px">
+                            <label>Phone no.</label>
+                        </div>
+                        <div class="col-xs-9" style="Padding-bottom: 3px">
+                            <input id="userProfile_userPhone" type="text" class="form-control"
+                                placeholder="Enter your phone " max="12" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3" style="Padding-bottom: 3px">
+                            <label>Role:</label>
+                        </div>
+                        <div class="col-xs-9" style="Padding-bottom: 3px">
+                            <input class="form-control" disabled="True" id="role_roleName" name="role.roleName"
+                                type="text">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12" style="margin-top:12px">
+                            <button type="submit" class="btn btn-masajid pull-right" style="Padding-bottom: 3px"
+                                id="btnSaveProfile" data-dismiss="modal">Save</button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="scripts/infoWidget.js" async defer></script>
+    <script type="text/javascript" src="scripts/timings.js" async defer></script>
+    <script type="text/javascript" src="scripts/flmnu.js" async defer></script>
+    <script type="text/javascript" src="scripts/slimscroll.js" async defer></script>
+    <script type="text/javascript" src="scripts/script.js" async defer></script>
+    <script type="text/javascript" src="scripts/bootstrap.js" async defer></script>
+    <script type="text/javascript" src="scripts/bootstrap-clockpicker.min.js" async defer></script>
+</body>
+
+</html>

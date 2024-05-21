@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <link rel="icon" type="image/png" href="./assets/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./assets/images/favicon-16x16.png" sizes="16x16">
+    <meta name="theme-color" content="#ffffff">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>مساجد - For Developers</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="styles/bootstrap-theme.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="scripts/script.js" async defer></script> -->
+    <script type="text/javascript" src="scripts/bootstrap.js" async defer></script>
+    <script>
+        $(document).ready(function () {
+            $('#lnkRun').click(function (e) {
+                if (e) {
+                    e.preventDefault()
+                }
+                callSearch();
+            });
+        })
+        function callSearch() {
+            $.ajax({
+                type: "GET",
+                url: `http://localhost:8300/v1/masjids/search?lat=12.3682265169693&lng=76.6509528432083&radius=2000`,
+                crossDomain: true,
+                cache: true,
+                dataType: 'JSON',
+                success: function (data) {
+                    console.log(data)
+                },
+                error: function (errordata) {
+                    alert();
+                }
+            });
+        }
+    </script>
+</head>
+
+<body>
+    <div style="top:0;position:fixed;z-index:1200;left:49%"><img src="assets/images/bismillah.png" alt="Bismillah" />
+    </div>
+    <!-- Navigation -->
+    <div class="navbar navbar-inverse navbar-fixed-top" style="height: 50px;">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- Button for smallest screens -->
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand">
+                    <img src="./assets/images/logo_N.png" />
+                </a>
+            </div>
+            <div class="navbar-collapse collapse" id="mnuCollapse">
+                <ul class="nav navbar-nav pull-right">
+                    <li><a id="btnDev" style="cursor:default" href="/"><span class="glyphicon glyphicon-home"
+                                title="Home" style="margin-top:-2px;"></span></a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+    <!-- /.navbar -->
+    <div class="container" style="width: 80%;margin-top: 52px;">
+        <div class="row">
+            <div class="col-xs-12 ">
+                <h2>For developers</h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="well" style="color:#000">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <i>masjidnear.me</i> exposes API that can be used by developers to get masjids from our
+                        database<br /><br />
+                        <u>The search
+                            API</u>&nbsp;-&nbsp;https://masjidnear.me/v1/masjids/search?{querystring}
+                    </div>
+                    <!-- <div class="col-xs-12">
+                        run <a id="lnkRun">http://localhost:8300/v1/masjids/search?lat=11&lng=72&radius=2000</a>
+                    </div> -->
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1">
+                    &nbsp;
+                </div>
+                <div class="col-xs-11">
+                    This is a REST API that can be called from the <i>masjidnear.me</i> domain, it uses the GET method
+                    and returns a JSON response.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    The main component of this API is the query string that will retrieve the masjids. This query needs
+                    to be designed in a way, that will for a search string that will be understood by the application.
+                    <i>masjidnear.me</i> used MongoDB as the database. The description of each component of the query
+                    and its usage is explained below.
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><u>Search by coordinates</u></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1">
+                    &nbsp;
+                </div>
+                <div class="col-xs-11">
+                    To search for a masjid using the latitude and longitude, use the search terms <b>lat</b> &amp;
+                    <b>lng</b>.<br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    if the latitude needs to be 12.3682265169693, then the search query should contain:
+                    <code>lat=12.3682265169693</code>. And if this needs to be followed by the longitude then, use and
+                    &amp; as the term separator; for example, if the logitude is 76.6509528432083, then the search
+                    query would be <code>lat=12.3682265169693&amp;lng=76.6509528432083</code>.<br />
+                    A radius can be passed to the coordinate search as a optional parameter; to provide the search
+                    radius to the query we need to use the search term <b>rad</b>.This is a value that should be in
+                    meters. For example, if the radius is 2000 meters (2 Kilometers, 1.25 miles) then this should be:
+                    <code>lat=12.3682265169693&amp;lng=76.6509528432083&amp;rad=2000</code><br />&nbsp;Complete search
+                    API would be:
+                    <code>https://masjidnear.me/v1/masjids/search?lat=12.3682265169693&lng=76.6509528432083&radius=2000</code>
+                    <p>There is more than just syntax that need to be taken care of when generating a coordinates query.
+                        Listed below are the this you should keep in mind</p>
+                    <ul>
+                        <li>For a location query, the latitude and longitude are mandatry</li>
+                        <li>If the search radius in not specified (but the latitude and longitude are present), then a
+                            default radius of 2000 meters would be taken</li>
+                        <li>If the radius is provided without the latitude or longitude, then it would not be considered
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><u>Search by Masjid name</u></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1">
+                    &nbsp;
+                </div>
+                <div class="col-xs-11">
+                    To search for a masjid using it's name, use the search terms <b>name</b>.<br />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    The search query needs to have the name, If the name is <i>masjid</i>, then the search query should
+                    be:&nbsp;
+                    <code>name=masjid</code>.<br />
+                    &nbsp;Therefore complete search API would be:
+                    <code>https://masjidnear.me/v1/masjids/search?name=masjid/</code>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><u>Search by City</u></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1">
+                    &nbsp;
+                </div>
+                <div class="col-xs-11">
+                    To search for a masjid using it's city, use the search terms <b>city</b>.<br />
+                </div>
+            </div>
+            <!-- <div class="row">
+                <div class="col-xs-12">
+                    <h4>The API Key<a name="APISection"></a></h4>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-xs-11">
+                    To Use the API, you need to have a key that is generated uniquely for you. This KEY can be generated
+                    by any registered user. To generate a new key for your self, make sure you are logged in then please
+                    click here<br /><br />
+                    <button class="btn-masajid">Generate API key</button><br />
+                    <div id="apiDiv"></div>
+                    <br /><br />
+                </div>
+            </div> -->
+            <div class="row">
+                <div class="col-xs-12">
+                    <h4><u>Other stuff you need to know</u></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    TODO
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <br /><br />
+</body>
+
+</html>

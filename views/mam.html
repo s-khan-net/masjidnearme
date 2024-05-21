@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, target-densitydpi=medium-dpi, user-scalable=0" />
+        <!-- Allows XHRs only over HTTPS on the same domain. -->
+        <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+        <title>masjid near me</title>
+        <link rel="stylesheet" type="text/css" href="css/style.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-slider.css" />
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-clockpicker.min.css" />
+        <link rel="stylesheet" type="text/css" href="css/flmnu.css" />
+        <link rel="stylesheet" type="text/css" href="css/font-awesome-4.6.3/css/font-awesome.css" />
+        <script type="text/javascript" src="js/jquery-1.10.2.min.js"></script>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/edit.js"></script>
+        <script type="text/javascript" src="js/refreshbtn.js"></script>
+        <script type="text/javascript" src="js/bootstrap.js"></script>
+        <script type="text/javascript" src="js/flmnu.js"></script>
+        <script type="text/javascript" src="js/mnu.js"></script>
+        <script type="text/javascript" src="js/timingsWidget.js"></script>
+        <script type="text/javascript" src="js/jquery.slimscroll.js"></script>
+        <script type="text/javascript" src="js/bootstrap-slider.js"></script>
+        <script type="text/javascript" src="js/bootstrap-clockpicker.min.js"></script>
+        <script type="text/javascript" src="js/notifications.js"></script>
+        <script type="text/javascript">
+            app.initialize();
+        </script>
+        <style>
+       .nav-collapse, .nav-collapse.collapse {
+            overflow: visible;
+        }   
+        .navbar .btn-navbar {
+            display: none;
+        }   
+        </style>
+    </head>
+    <body>
+            <div id="splash"><img src="img/logo.png" /><br><div style="color:darkgreen" id="splashText">Initializing...<br></div> <div style="padding-top:19px;color:darkgreen;display: none" id="btnLocDiv">Please give <input type="button" value="permission" id="btnLocRequest" class="btn-masajid"/> to get your location</div></div>
+            <div id="alertMsg"></div>
+            <div id="radMsg"></div>
+            <div class="mnuBtn btn-masajid" id="mnuBtnOuter" style="position:absolute;top:12px;right:86%;z-index:4;display:none" onclick="showMnu()">
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+            </div>
+            <div id="masjidBtnOuter" style="right:1%;top:0;position:absolute;z-index:4;padding-top:9px;display:none">
+              <!-- <img src="img/logo_N.png" /> -->
+              <span class="fa fa-cog" style="float:left;padding-right:10px;padding-left:3px;font-size:32px;color:darkgreen;text-shadow: -1px -3px 9px rgba(150, 150, 150, 1);" onclick="closeNav(); showSettings()"></span>
+              <!-- <span class="fa fa-user" style="float:left;padding-right:8px;padding-left:3px;font-size:21px;color:darkgreen" onclick="alert('user')"></span> -->
+              <span class="fa fa-compass" style="float:left;padding-right:8px;padding-left:3px;font-size:32px;color:darkgreen;text-shadow: -1px -3px 9px rgba(150, 150, 150, 1);" onclick="closeNav(); setScreenForCompass()"></span>
+            </div> 
+            <div id="divOffline" style="color:red;position:absolute;z-index:2001;top:10%;left:35%;font-size:smaller;display:none">You are offline</div>
+            <div id="timingsWidget">
+                    <div class="widgetContainer"></div>
+            </div>
+            <div id="debugLoader" class="alert alert-masjid noselect" style="display:none;position:absolute;z-index:2000;left:35%;top:10%" onclick="$('#debugLoader').hide();"></div>
+            <div id="loader" class="alert alert-masjid noselect" style="display:none;position:absolute;z-index:2000;left:35%;top:30%" >Searching <span class="colorAnim">...</span></div>
+            <div style="width:30px;position:absolute;" id="mnu"></div>
+            <div id="settingsMenu"></div>
+            <div id="dvMap" style="width:100%;">
+              <div id="timingsWidgetInner"></div>
+              <div class="mnuBtn btn-hidden" id="mnuBtnInner" style="position:absolute;top:12px;right:86%;">
+                  <span class="icon-bar" style="background-color:transparent;padding-right:12px"></span>
+                  <span class="icon-bar" style="background-color:transparent;padding-right:12px"></span>
+                  <span class="icon-bar" style="background-color:transparent;padding-right:12px"></span>
+              </div>
+              <!-- <div class="mnuBtn btn-hidden" id="masjidBtnInner" style="position:absolute;top:12px;right:4%;">
+                  <span class="icon-bar" style="background-color:transparent;padding-right:12px"></span>
+                  <span class="icon-bar" style="background-color:transparent;padding-right:12px"></span>
+                  <span class="icon-bar" style="background-color:transparent;padding-right:12px"></span>
+              </div> -->
+              <div style="position:absolute;right:1%;width:90px;height:50px;background-color:transparent"></div>
+              <div style="position:absolute;top:59px;right:80%;display:inline-block" class="btn-toggle">
+                  <div style="color:#FFF;font-size:smaller;text-shadow: 2px 2px 7px #403e3e;text-align:center">Hybrid</div>
+                  <div class="btn-masajid btn-xs noselect" style="display:inline-block;border-top-right-radius:0;border-bottom-right-radius:0;box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.77);" id="btnTogHybrid">On</div><!----><div class="btn-masajid btn-xs togActive noselect" style="display:inline-block;border-top-left-radius:0;border-bottom-left-radius:0;box-shadow: 0px 0px 1px 0px rgba(0,0,0,0.77);" id="btnTogRoad">Off</div>
+              </div>
+              <div style="width:30px;float:right;height:99%;background:transparent"></div>
+              <div id="btnResetLoc" style="width:32px;height:32px;display:none" title="reset location"><div id="blRing" ><div id="wRing" class="plus" ></div></div></div>
+              <div id="btnReset" style="width:32px;height:32px;display:none" title="reset location"><div id="blRing" ><div id="wRing" class="plus" ></div></div></div>
+              <!-- <div class="bmeter blink_me" style="width:20px;"></div> -->
+            </div>
+            <div id="sidenavblocker" onclick="closeNav()"></div>
+            <input type="hidden" id="hidRadius" value=2000 />
+            <div id="hidActive" style="display:none"></div> 
+            <div id="hidTimes" style="display:none"></div>
+            <input type="hidden" id="calcMethodVal" value=2 />
+            <input type="hidden" id="hidUser" value="">
+            <!-- <input type="hidden" id="hidMapType" value=1 /> -->
+            <input type="hidden" id="savedMasjids" />
+            <input type="hidden" id="hidLaunch" value=0 />
+            <input type="hidden" id="hidCurrentLocation" />
+            <input type="hidden" id="hidInitialLocation" />
+            <input type="hidden" id="hidUpdatedInitialLocation" />
+            <input type="hidden" id="hidLimit" value=20 />
+            <input type="hidden" id="hidMaslak" value=1 />
+            <input type="hidden" id="hidNotifications" value=1 />
+            <input type="hidden" id="hidAppVersion" />
+            <input type="hidden" id="hidUserEmail" />
+            <input type="hidden" id="hidInitialLocationName" />
+            <input type="hidden" id="hidUpdatedInitialLocationName" />
+            <input type="hidden" id="hidNotificationsDate" />
+        </div>
+
+        <!-- Modal -->
+  <div class="modal fade" id="settingsModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <h4 class="modal-title" >Settings</h4>
+        </div>
+        <div class="modal-body" id="settingsBody">
+            <div class="row" >
+                <div class="col-xs-8 text-left">
+                  <label>Salaah Notifications</label>
+                </div>
+                <div class="col-xs-4 text-left">
+                  <input  type="checkbox" id="chkNotifications">
+                </div>
+              </div>
+            <div class="row initialLocationContainer">
+              <div class="col-xs-4 text-left">
+                <label>Your Location : </label>
+              </div>
+              <div class="col-xs-6 text-left">
+                <textarea id="txtInitialLocationName" readonly style="width:95%; color:#000;border-bottom:1px solid #CCC" rows=2 class="initialLocationContainer"></textarea>
+              </div>
+              <div class="col-xs-2 text-left">
+                <div id="btnResetInitialLocation" class="btn-masajid" style="border-radius:50%;width:32px;height:32px;text-align: center" ><img style="height: 15px;width: 15px;margin-top: -2px;" id="imgMarker" src="./img/green-dot.png"><img style="display:none;margin-top: -39px;" id="imgLocationLoader" src="./img/loader.gif" /></div>
+              </div>
+            </div>
+            <div class="row initialLocationContainer" style="border-bottom:1px solid #CCC;padding:9px">
+              <div class="col-xs-12" style="margin-left:1px;margin-right:1px">
+                The Salaah notifications are set as per this location.
+              </div>
+            </div>
+            
+            <div class="row" style="border-bottom:1px solid #CCC;padding:9px">
+              <div class="col-xs-4  text-left">
+                <label>Asr time setting</label>
+              </div>
+              <div class="col-xs-4 text-left" >
+                  <!-- 1 hanfi 0 shafi -->
+                  <input type='radio' name='maslak' value='1'/>&nbsp;<b>Hanfi</b>
+              </div>
+              <div class="col-xs-4 text-left">
+                <input type='radio' name='maslak' value='0' />&nbsp;<b>Shafi</b>
+              </div>
+            </div>
+            <div class="row" style="border-bottom:1px solid #CCC;padding:9px">
+              <div class="col-xs-12">
+                  <label>Set calculation method for salaah timings</label>
+              </div>
+              <div class="col-xs-12">
+                  <select id="calcMethod" class="form-control input-sm">
+                  <option value=1>University of Islamic Sciences, Karachi</option>
+                  <option value=2>ISNA-Islamic Society of North America</option>
+                  <option value=3>MWL-Muslim World League</option>
+                  <option value=4>Umm al-Qura, Makkah</option>
+                  <option value=5>Egyptian General Authority of Survey</option>
+                  </select>
+              </div>
+            </div>
+            <div class="row" style="border-bottom:1px solid #CCC;padding:9px">
+                <div class="col-xs-12">
+                  <label>Set Search Radius</label>
+                </div>
+                <div class="col-xs-12">
+                  <div class="row" style="Padding-bottom:3px;">
+                    <div class="col-xs-9" style="padding-left:32px;">
+                        <input id="sldRad" data-slider-id='radSlider' type="text" data-slider-min="2000" data-slider-
+
+  max="10000" data-slider-step="2000" data-slider-value="2000" data-slider-ticks="[2000, 4000, 6000, 8000, 10000]" data-
+
+  slider-ticks-snap-bounds="30" style="padding-left:12px" />
+                    </div>
+                    <div class="col-xs-3" id="sldRadVal" style="padding-left:25px;color:#000">
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="row" style="border-bottom:1px solid #CCC;padding:9px">
+                <div class="col-xs-12">
+                      <label>Set no. of masjids loaded</label>
+                </div>
+                <div class="col-xs-12" style="Padding-bottom:3px;">
+                    <div class="row">
+                      <div class="col-xs-9" style="padding-left:32px;">
+                          <input id="sldLimit" data-slider-id='radSlider' type="text" data-slider-min="20" data-slider-max="60" data-slider-step="20" data-slider-value="20" data-slider-ticks="[20, 40, 60]" data-slider-ticks-snap-bounds="20" style="padding-left:12px" />
+                      </div>
+                      <div class="col-xs-3" id="sldLimitVal" style="padding-left:25px;color:#000">
+                      </div>
+                      <div class="col-xs-12" style="Padding-bottom:3px">To load more masjids, please visit <a href="https://masjidnear.me" target="_blank"><i>masjidnear.me</i></a></div>
+                    </div>
+                </div>
+            </div>  
+            <!--<div class="row" style="border-bottom:1px solid #CCC;padding:9px">
+              <button id="btnShowSettings" class="btn-masajid">Show Settings</button>
+            </div>
+            <div class="form-group">
+              <div class="col-xs-12" style="Padding-bottom:3px;Padding-bottom:3px;">
+                  <span class="infoWTimes" >Here's some <button  style="width:25%" data-dismiss="modal" onclick="showHelp()" >Help</button></span>
+              </div>
+          </div>     -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-masajid" data-dismiss="modal" onclick="$('#imgLocationLoader').hide();">Cancel</button>  
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn-masajid" onclick="saveSettings()" data-dismiss="modal" id="btnSaveSettings">Save</button>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+        
+            <!-- Modal -->
+  <div class="modal fade" id="termsModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <span class="modal-title" > <img src="img/logo.png" /></span>
+        </div>
+        <div class="modal-body" id="termsBody">
+          <div class="row">
+            <div class="col-xs-12" style="Padding-bottom:3px">
+                <div class="row">
+                  <div class="col-xs-12">
+                    <p><i>masjid near me</i> is developed and maintained by <a href="http://saudkhan.net" target="_blank">Saud Khan</a>.</p>
+                    <p>This app. is connected to <a href="https://masjidnear.me" target="_blank">https://masjidnear.me</p>
+                    <p>Write to me at <a href="mailto:saud@saudkhan.net?subject=Contact from masjid near me">saud@saudkhan.net</a>
+                    </p>
+                  </div>
+                  <div class="col-xs-12" style="Padding-bottom:3px">
+                    The salaah times are obtained from <a href="http://aladhan.com" target="_blank">Al Adhan</a>
+                  </div>
+                  <div class="col-xs-12" style="Padding-bottom:3px">
+                    <span class="infoWTimes" >Here's some <button  style="width:25%" data-dismiss="modal" onclick="showHelp()" >Help</button></span>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding-left:0px;">
+          <div class="row">
+            <div class="col-xs-5" style="padding-left:4px">
+            <div style="display:inline-block;padding-right:6px"><a href="https://plus.google.com/communities/102118653745285144526" target="_blank"><img src="img/g_24X24.png" alt="g+"/></a></div><div style="display:inline-block;padding-right:6px"><a href="http://twitter.com/masjidnearme" target="_blank"><img src="img/tw_24X24.png" alt="twitter" /></a></div><div style="display:inline-block;padding-right:1px"><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="img/y_24X24.png" alt="YouTube"/></a></div>
+            </div>
+            <div class="col-xs-6"><img src="img/powered_by_google_on_white.png" /></div>
+            <div class="col-xs-1">&nbsp;</div>
+          <div class="row">
+            <div class="col-xs-9">&nbsp;</div>
+            <div class="col-xs-2"><button type="button" class="btn-masajid" data-dismiss="modal">Close</button></div>
+            <div class="col-xs-1">&nbsp;</div>
+          </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+
+                <!-- Modal -->
+  <div class="modal fade" id="moreInfoModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header" id="moreInfoTitle">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <!-- <div class="modal-title" id='moreInfoTitle' ></div> -->
+        </div>
+        <div class="modal-body" id="moreInfoBody">
+          
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-masajid" onclick="closemoreinfo()" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="helpDiv" style="display:none;width:100%;height:100%;position:fixed;z-index:2000;top:0;background-color:#FFF">
+      <div class="headbar infoWTimes row">
+      <div class="col-xs-1">
+        <span id="btnBack" class="fa fa-long-arrow-left" style="font-size:24px;padding:12px" onclick="hideHelp()"></span>
+      </div>
+      <div class="col-xs-3"></div>
+      <div class="col-xs-4">
+        <div style="text-align:center;letter-spacing:6px;font-size:20px;padding-top:16px">Help</div>
+      </div>
+      <div class="col-xs-4"></div>
+      
+    </div>
+    <div style="margin-top:37px"></div>
+    <div class="container" >
+        <div class="panel-group" id="accordion">
+          <div class="panel panel-default">
+              <h4 class="panel-title">
+                <button data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="btn-masajid panel-heading" style="width:100%;letter-spacing:4px">Basic usage</button>
+              </h4>
+            <div id="collapse1" class="panel-collapse collapse">
+              <div style="padding:4px">&nbsp;&nbsp;&nbsp;When you start this application, it locates you on the map <img src="./img/pin.png" />, and gets the nearest masjids <img src="https://maps.google.com/mapfiles/ms/icons/green-dot.png" />, masjid names are listed on the menu. On touching the marker, or on a name from the menu, the details of the masjid are shown. You can navigate to the masjid by touching the <i class="glyphicon glyphicon-send"></i> button in the description window. (this will open google maps).<br>
+                    <div style="display:inline-block">&nbsp;Refresh the search by touching </div><div id="btnReset" style="width:22px;height:22px;display:inline-block;border-radius: 50%;background: darkgreen;cursor: default;box-shadow: 0px 1px 3px #666;bottom: inherit;right:inherit;position:inherit;"><div id="blRing" ><div id="wRing" class="plus" ></div></div></div><div style="display:inline-block"> on the bottom left</div>. You can move the pin (long press the pin to activate) to reload the masjids at the new location. Watch a demo here: <a href="https://youtu.be/QTt8uqg2LtQ" target="_blank"><img src="img/y_24X24.png" alt="YouTube"/></a><br>If no masjids are found, search for masjids will be triggered automatically by incrementing the search radius. Watch: <a href="https://youtu.be/8HiAeIq9Xrg" target="_blank"><img src="img/y_24X24.png" alt="YouTube"/></a></div>
+            </div>
+          </div>
+          <div class="panel panel-default">
+            <h4 class="panel-title">
+            <button data-toggle="collapse" data-parent="#accordion" href="#collapse6" class="btn-masajid panel-heading" style="width:100%;letter-spacing:4px">More usage details</button>
+            </h4>
+          <div id="collapse6" class="panel-collapse collapse">
+            <div style="padding:4px">
+            <div class="row">
+              <div class="col-xs-8">&nbsp;&nbsp;&nbsp;The masjids loaded on the menu, can be verified (the ones present in our database) or unverified (the ones on google maps).</div>
+              <div class="col-xs-4" style="padding:2px"><img src="./img/helpV_UV.png" style="padding-top:10px;"/></div>
+            </div>
+            <div class="row">
+              <div class="col-xs-4" style="padding-left: 46px;padding-top: 30px;"><img src="./img/help_edits.png" /></div>
+              <div class="col-xs-8">The verifed masjids have data about the Salaah times; more details that can be viewed by touching the masjid marker's infowindow </div>
+            </div>
+            <div class="row">
+              <div class="col-xs-12">
+                &nbsp;Registered users with edit permissions can edit the details by using <span class="infoWTimes"><button style="width:15%;">edit</button></span> button, this will open the edit form. Watch: <a href="https://youtu.be/Wps4rMIvNag" target="_blank"><img src="img/y_24X24.png" alt="YouTube"/></a> To verify a masjid, would have to use the <b><a>Verify</a></b> button that will navigate to masjidnear.me. Watch: <a href="https://youtu.be/KDBfSW-Puvk" target="_blank"><img src="img/y_24X24.png" alt="YouTube"/></a>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
+          <div class="panel panel-default">
+              <h4 class="panel-title">
+                <button data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="btn-masajid panel-heading" style="width:100%;letter-spacing:4px">Settings &amp; Users</button>
+              </h4>
+            <div id="collapse2" class="panel-collapse collapse">
+              <div style="padding:4px">&nbsp;Salah time notifications, location for notifications, Hanafi or Shafi setting, Search radius, Location setting for slaah times reminders, Salaah times calculation method &amp; Number of masjids loaded, can be set using the <span style="background:linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%);width:20%"><span class="fa fa-cog" style="padding-right:5px;padding-left:3px;"></span>Settings</span>. Registered users can login using the <span style="background:linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%);width:20%"><span class="fa fa-user" style="padding-right:5px;padding-left:3px;"></span> Users</span> menu.  Unregistered user would have to use the website to register, The link in the sign up form, (<span class="load">Please use the website to <b><a>Register</a></b></span>) will directly take you there. watch this demo: <a href="https://youtu.be/HxnE6WoaSmc" target="_blank"><img src="img/y_24X24.png" alt="YouTube"/></a></div>
+            </div>
+          </div>
+          <!-- <div class="panel panel-default">
+              <h4 class="panel-title" >
+                <button data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="btn-masajid panel-heading" style="width:100%;letter-spacing:4px">We use...</button>
+              </h4>
+            <div id="collapse3" class="panel-collapse collapse">
+            <div class="col-xs-12" style="padding-top:4px">
+               &nbsp;<i>masjid near me</i> is built using <a href="http://phonegap.com/">Phonegap</a> with the <a href="https://github.com/mapsplugin/cordova-plugin-googlemaps/wiki">phonegap-googlemaps-plugin</a><br> -->
+              <!--&nbsp;<i>masjid near me</i> is connected to <a href="https://masjidnear.me" target="_blank">https://masjidnear.me</a>
+            </div>
+            <div class="col-xs-12">
+              The Salah times and the hijri date are provided by <a href="https://aladhan.com/" target="_blank">AlAdhan</a>.
+            </div>
+            <div class="col-xs-12">
+              The Ayaat are obtained from <a href="http://quranapi.azurewebsites.net/" target="_blank">quranapi</a>.
+            </div>
+              <div class="col-xs-12">
+              Please make sure your device has the latest version of <a href="https://play.google.com/store/apps/details?id=com.google.android.webview" target="_blank"><img src="img/webview.png" width="24" height="24" /> webview</a>
+            </div>
+            <div class="col-xs-12">
+              please see the <a href="https://masjidnear.me/Legal/Home/Licence" target="_blank">Software licences</a> page for all the details.
+            </div>
+            </div>
+          </div> -->
+        <div class="panel panel-default">
+              <h4 class="panel-title">
+                <button data-toggle="collapse" data-parent="#accordion" href="#collapse4" class="btn-masajid panel-heading" style="width:100%;letter-spacing:4px">What's new</button>
+              </h4>
+          <div id="collapse4" class="panel-collapse collapse">
+            <div class="col-xs-12" style="padding-top:4px;padding-bottom:4px">
+              &nbsp;As of this version registered users can verify masjids from the application<br> watch this demo: <a href="https://youtu.be/UQoO2Y4uGdQ" target="_blank"><img src="img/y_24X24.png" alt="YouTube"/></a>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default">
+            <h4 class="panel-title">
+                <button data-toggle="collapse" data-parent="#accordion" href="#collapse5" class="btn-masajid panel-heading" style="width:100%;letter-spacing:4px">Legal</button>
+              </h4>
+          <div id="collapse5" class="panel-collapse collapse">
+            <div class="panel-body">
+              find the <a href="https://masjidnear.me/Legal/Home/Android" target="_blank">Private policy</a> <span style="font-size:smaller" id="btnShowN"> V 2.7.37</span> and <a href="https://masjidnear.me/Legal/Home/Licence" target="_blank">Software licences</a>
+            </div>
+          </div>
+        </div>
+        </div> 
+        <div class="row well">
+          <div class="col-xs-12" style="background-color:white;color:#000">
+            &nbsp;Please verify as many masjids as you can and help others.<br>
+            &nbsp;Jazakallahu khair, please remember me in your prayers.<br><a href="mailto:saud@saudkhan.net?subject=Contact from masjid near me" >Saud</a>
+          </div>
+          <div class="row" style="padding-bottom:12px;padding-top:2px">
+            <div class="col-xs-3" style="text-align:right;padding-top:8px">Social: </div>
+            <div class="col-xs-7" style="padding-top:8px">
+            <div style="display:inline-block;padding-right:8px"><a href="http://twitter.com/masjidnearme" target="_blank"><img src="img/tw_24X24.png" alt="twitter" /></a></div><div style="display:inline-block;padding-right:8px"><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="img/y_24X24.png" alt="YouTube"/></a></div>
+            </div>
+            <div class="col-xs-2">&nbsp;</div>
+          </div>
+        </div>
+    </div>
+  </div>
+  <div id="compassDiv" style="display:none;width:100%;height:100%;position:fixed;z-index:2000;top:0;background-color:#FFF">
+    <div class="headbar infoWTimes row">
+      <div class="col-xs-1">
+        <span id="btnBack" class="fa fa-long-arrow-left" style="font-size:24px;padding:12px" onclick="hideCompass()"></span>
+      </div>
+      <div class="col-xs-3"></div>
+      <div class="col-xs-4">
+        <div style="text-align:center;letter-spacing:6px;font-size:20px;padding-top:18px">Compass</div>
+      </div>
+      <div class="col-xs-4"></div>
+      
+    </div>
+    <div style="margin-top:57px">
+      <div style="font-size:12px;text-align:center;vertical-align:bottom;text-align:center" id="placeCompass"></div>  
+    </div>
+    <div class="container">
+    <!-- <div class="row" style="padding-bottom:12px">
+      <div class="col-xs-2"></div>
+        <div class="col-xs-8">
+          
+        </div>
+        <div class="col-xs-2"></div>
+      </div> -->
+      <div class="row" style="padding-bottom:12px">
+        <div class="col-xs-2"></div>
+        <div class="col-xs-8">
+          <div style="font-size:16px;border-bottom:1px solid #CCC;text-align:center" id="txtCompassError"></div>  
+        </div>
+        <div class="col-xs-2"></div>
+      </div>
+      <div class="row" style="padding-top:32px;">
+        <div class="col-xs-12">
+          <div id="qiblaCircle">
+            <!-- <div style="width: 32px;height:32px;background-color:tramsparent;border-radius: 50%;right: 50%;position: fixed; margin: 0 auto;z-index: 3;" id="kaaba"><img src="img/kaaba.png" width="32px" height="32px" /></div> -->
+            <!-- <div class='deg0'>
+                <div style="height:4px;width:4px;background-color:red;border-radius:50%"></div>
+            </div> -->
+            <!--         <img src="img/compass.png" id="imgNeedle"> -->
+            <div class="north-needle">
+              <div style="height:13px;width:13px;background-color:#ff6065;border-radius:50%;position:absolute">
+                <div style="height:63%;width:63%;background-color:#d80c0c;border-radius:50%;position:relative;top:19%;left:19%"></div>  
+              </div>
+            </div>
+            <div class="arrow_box" >
+              <div style="transform:rotate(90deg);padding-left: 50px;letter-spacing: 12px;color: darkgreen;">Qibla</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row" style="padding-top:21px">
+        <div class="col-xs-1"></div>
+        <div class="col-xs-10 infoWTimes">
+          Note: You may have to rotate your device to get a correct reading
+        </div>
+        <div class="col-xs-1"></div>
+      </div>
+    </div>
+  </div>
+                <!-- Modal -->
+  <div class="modal fade" id="loginModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+     <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> -->
+          <h4 class="modal-title" >Sign in</h4>
+        </div>
+        <div class="modal-body" id="loginBody">
+          <fieldset id="loginFrm">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-xs-12" style="Padding-bottom:3px">
+                        <input type="email" class="form-control" placeholder="Enter your email" required="true" autofocus="true" value="" id="userEmail" />
+                    </div>
+                    <div class="col-xs-12" style="Padding-bottom:3px">
+                        <input type="password" class="form-control" placeholder="Enter your Password" required="true" value="" id="userPwd" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-8">
+                    </div>
+                    <div class="col-xs-4" style="Padding-bottom:3px">
+                        <div type="button" class="btn-masajid" onclick="signIn()">Sign in</div>
+                    </div>
+                </div>
+            </form>
+          </fieldset>
+          <fieldset id="regFrm">
+            <form class="form-horizontal">
+                <div class="form-group" id="regFrm">
+                    
+                </div>
+            </form>
+          </fieldset>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-masajid" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+
+                  <!-- Modal -->
+  <div class="modal fade" id="userModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+     <div class="modal-content">
+        <div class="modal-header">
+          <!-- <button type="button" class="close" data-dismiss="modal">&times;</button> 
+          <h4 class="modal-title" >Sign in</h4>-->
+        </div>
+        <div class="modal-body">
+          <fieldset id="loginFrm">
+            <form class="form-horizontal">
+                <div class="form-group" id="userTxt">
+                    
+                </div>
+            </form>
+          </fieldset>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+          <div class="col-xs-2"></div>
+          <div class="col-xs-5">
+            <button type="button" class="btn-masajid" data-dismiss="modal" onclick="signIn()">Sign out</button>
+          </div>
+          <div class="col-xs-5">
+            <button type="button" class="btn-masajid" data-dismiss="modal">Close</button>
+          </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+                   <!-- Modal -->
+  <div class="modal fade" id="editModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+     <div class="modal-content">
+        <div class="modal-header">
+           <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>  -->
+          <h4 class="modal-title" id="editName">Editing</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="input-group clockpicker"  data-autoclose="true">
+                <input type="text" id="fajrVal" class="form-control" value="" placeholder = "Fajr" disabled style="background-color:#fff" />
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+                </span>
+              </div>
+            </div>
+            <div class="col-xs-6">
+             <div class="input-group clockpicker" data-placement="bottom" data-align="right" data-autoclose="true">
+              <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-time"></span>
+              </span>
+              <input type="text" id="zuhrVal" class="form-control" value="" placeholder = "Zuhr" disabled style="background-color:#fff">
+             </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="input-group clockpicker" data-autoclose="true">
+                <input type="text" id="asrVal" class="form-control" value="" placeholder = "Asr" disabled style="background-color:#fff">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+                </span>
+              </div>
+            </div>
+            <div class="col-xs-6">
+              <div class="input-group" data-placement="bottom" data-align="right" data-autoclose="true">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time" style="color:#ccc"></span>
+                </span>
+                <input type="text" id="maghribVal" class="form-control" value="" placeholder = "Maghrib" disabled style="background-color:#fff">
+                
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6">
+              <div class="input-group clockpicker" data-autoclose="true">
+                <input type="text" id="ishaVal" class="form-control" value="" placeholder = "Isha" disabled style="background-color:#fff">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+                </span>
+              </div>
+            </div> 
+            <div class="col-xs-6">
+              <div class="input-group clockpicker" data-placement="bottom" data-align="right" data-autoclose="true">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-time"></span>
+                </span>
+                <input type="text" id="jumahVal" class="form-control" value="" placeholder = "Jumah" disabled style="background-color:#fff">
+              </div> 
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" id="masjidId" />
+          <button type="button" class="btn-masajid" data-dismiss="modal">Cancel</button>  
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn-masajid" data-dismiss="modal" onclick="updateTimes()">Save</button>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+  <div class="modal fade" id="VV" role="dialog">
+      <div class="modal-dialog">
+      
+        <!-- Modal content-->
+      <div class="modal-content">
+          <div class="modal-header">
+          <h4 class="modal-title" >Verse from the Quran</h4>
+          <div style="font-size:smaller;text-align:center" id="ayahLoader">loading...</div>
+          </div>
+          <div class="modal-body" id="VVBody" class="arabicText">
+            
+          </div>
+          <div class="modal-footer">
+            <div class="row">
+            <div class="col-xs-2"></div>
+            <div class="col-xs-5" id="chptr" style="font-size:14px"></div>
+            <div class="col-xs-5">
+              <button type="button" class="btn-masajid" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+          </div>
+        </div>
+        
+      </div>
+  </div> 
+  <div class="modal fade" id="editMasjidModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+     <div class="modal-content">
+        <div class="modal-header">
+           <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>  -->
+          <h4 class="modal-title" id="editMasjidMasjidName">Editing</h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <input id="txtMasjidName" type="text" class="form-control" placeholder="Masjid Name" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <span>This is not a masjid?<input id="chkIsNotMasjid" type="checkbox" /></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <textarea rows="2" id="txtMasjidDescription" name="txtMasjidDescription" type="text" class="form-control" placeholder="Short description of the masjid"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <input id="txtMasjidAdressStreet" type="text" class="form-control" placeholder="Street" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <input id="txtMasjidAdressLocality" type="text" class="form-control" placeholder="Locality" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6" style="padding-right:2px;padding-bottom:3px;">
+              <input id="txtMasjidAdressZip" type="text" class="form-control" placeholder="zip/pin Code" />
+            </div>
+            <div class="col-xs-6" style="padding-left:2px;padding-bottom:3px;">
+              <input id="txtMasjidAdressCity" type="text" class="form-control" placeholder="City" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6" style="padding-right:2px;padding-bottom:3px;">
+              <input id="txtMasjidAdressState" type="text" class="form-control" placeholder="State" />
+            </div>
+            <div class="col-xs-6" style="padding-left:2px;padding-bottom:3px;">
+              <input id="txtMasjidAdressCountry" type="text" class="form-control" placeholder="Country" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <input id="txtMasjidAddressPhone" type="text" class="form-control" placeholder="Phone (contact number)" />
+            </div>
+          </div>
+<!--           <div class="row">
+            <div class="col-xs-12">
+              <input id="txtMasjidAddressgooglePlaceId" type="text" class="form-control" placeholder="Place ID" disabled/>
+            </div>
+          </div> -->
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" id="masjidId" />
+          <button type="button" class="btn-masajid" data-dismiss="modal" onclick="closemoreinfo();">Cancel</button>  
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn-masajid" onclick="updateMasjid();">Save</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <div class="modal fade" id="verifyMasjidModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+     <div class="modal-content">
+        <div class="modal-header">
+           <!-- <button type="button" class="close" data-dismiss="modal">&times;</button>  -->
+          <h4 class="modal-title" id="verifyMasjidMasjid"></h4>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <input id="txtVMasjidName" type="text" class="form-control" placeholder="Masjid Name" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <span>This is not a masjid?<input id="chkVIsNotMasjid" type="checkbox" /></span>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <textarea rows="2" id="txtVMasjidDescription" name="txtVMasjidDescription" type="text" class="form-control" placeholder="Short description of the masjid"></textarea>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <input id="txtVMasjidAdressStreet" type="text" class="form-control" placeholder="Street" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <input id="txtVMasjidAdressLocality" type="text" class="form-control" placeholder="Locality" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6" style="padding-right:2px;padding-bottom:3px;">
+              <input id="txtVMasjidAdressZip" type="text" class="form-control" placeholder="zip/pin Code" />
+            </div>
+            <div class="col-xs-6" style="padding-left:2px;padding-bottom:3px;">
+              <input id="txtVMasjidAdressCity" type="text" class="form-control" placeholder="City" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6" style="padding-right:2px;padding-bottom:3px;">
+              <input id="txtVMasjidAdressState" type="text" class="form-control" placeholder="State" />
+            </div>
+            <div class="col-xs-6" style="padding-left:2px;padding-bottom:3px;">
+              <input id="txtVMasjidAdressCountry" type="text" class="form-control" placeholder="Country" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12" style="padding-bottom:3px;">
+              <input id="txtVMasjidAddressPhone" type="text" class="form-control" placeholder="Phone (contact number)" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-6" style="padding-right:2px;padding-bottom:3px;">
+              <input id="txtVMasjidAdressLat" type="text" class="form-control" readonly/>
+            </div>
+            <div class="col-xs-6" style="padding-left:2px;padding-bottom:3px;">
+              <input id="txtVMasjidAdressLng" type="text" class="form-control" readonly/>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12">
+              <input id="txtVMasjidAddressgooglePlaceId" type="hidden" />
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="hidden" id="masjidId" />
+          <button type="button" class="btn-masajid" data-dismiss="modal" onclick="closemoreinfo();">Cancel</button>  
+          &nbsp;&nbsp;&nbsp;&nbsp;
+          <button type="button" class="btn-masajid" onclick="verifyMasjid();">Verify</button>
+        </div>
+      </div>
+    </div>
+  </div> 
+  <div class="modal fade" id="firstModal" role="dialog">
+    <div class="modal-dialog">
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title" >What's new</h4>
+        </div>
+        <div class="modal-body" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;font-size:15px">
+          <ul>
+            <li>Now, you can verify masjids from the app</li>
+            <li>Verified masjids will appear immediately on the map</li>
+            <li>Location for notifications can be reset from the settings</li>
+            <li>Updated help</li>
+            <li>Updated API to assist saving of new masjid</li>
+          </ul>
+        </div>
+        <div class="modal-footer">
+          <div class="row">
+          <div class="col-xs-2"></div>
+          <div class="col-xs-5"></div>
+          <div class="col-xs-5">
+            <button type="button" class="btn-masajid" data-dismiss="modal">Close</button>
+          </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div> 
+  </body>
+</html>

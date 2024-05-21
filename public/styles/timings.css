@@ -1,0 +1,41 @@
+.timings-container {
+    -webkit-box-shadow: 2px 2px 1px 0px rgba(0,0,0,0.77);
+        -moz-box-shadow: 2px 2px 1px 0px rgba(0,0,0,0.77);
+        box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.77);
+        font-weight:600;
+        z-index: 1031;
+        position: absolute;
+        top: 0;
+        left: calc(45% - 100px);
+        border-radius:3px;
+
+}
+.widgetContainer{
+    /*max-width:317px;*/
+    padding:4px;
+    margin:0 auto;
+    background:-webkit-linear-gradient(180deg, rgba(180,240,223,1) 0%, rgba(255,245,245,1) 100%);
+    background:-o-linear-gradient(180deg, rgba(180,240,223,1) 0%, rgba(255,245,245,1) 100%);
+    background:-moz-linear-gradient(180deg, rgba(180,240,223,1) 0%, rgba(255,245,245,1) 100%);
+    background:linear-gradient(180deg, rgba(180,240,223,1) 0%, rgba(255,245,245,1) 100%);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.77);
+    
+}
+.stb{
+    width:55px;
+    height:43px;
+    border-radius:3px;
+    text-align:center;
+    display:inline-block;
+    vertical-align: middle;
+    cursor:default;
+}
+.active {
+    color:#999;
+}
+
+.load {
+    text-align: center;
+    margin-top: -3px;
+    font-weight: 700;
+}

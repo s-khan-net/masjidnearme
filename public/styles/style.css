@@ -1,0 +1,145 @@
+body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.42857143;
+  color: #666666;
+  background-color: #ffffff;
+  margin: 0;
+}
+
+textarea {
+  resize: none;
+}
+
+.alert {
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+}
+
+.alert-masjid {
+  background: -webkit-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%);
+  background: -o-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%);
+  background: -moz-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%);
+  background: linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%);
+  cursor: default;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.77);
+}
+
+.alert-masjid>div {
+  color: #666666;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Chrome/Safari/Opera */
+  -khtml-user-select: none;
+  /* Konqueror */
+  -moz-user-select: none;
+  /* Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently*/
+}
+
+.leaflet-popup {
+  font-size: medium;
+}
+
+.masjid-icon {
+  background: -webkit-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%);
+  background: -o-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%);
+  background: -moz-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%);
+  background: linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%);
+}
+
+
+.boxx {
+  background-color: #fff;
+}
+
+.infoWTimes {
+  color: #17603A;
+  border-radius: 3px;
+}
+
+.infoWTimes div {
+  /*	border-bottom:1px solid lightgreen;
+	border-left:1px solid lightgreen;
+	border-right:1px solid lightgreen;*/
+  font-family: verdana;
+  text-align: center;
+  font-size: 12px;
+}
+
+.infoWTimes button {
+  background-color: darkgreen;
+  color: #fff;
+  width: 70%;
+
+}
+
+.btn-masajid {
+  background: -webkit-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%) !important;
+  background: -o-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%) !important;
+  background: -moz-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%) !important;
+  background: linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%) !important;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.77);
+  border-radius: 4px;
+  color: #17603A;
+}
+
+.btn-masajid:hover {
+  background: -webkit-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%) !important;
+  background: -o-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%) !important;
+  background: -moz-linear-gradient(180deg, rgba(180, 240, 223, 1) 0%, rgba(255, 245, 245, 1) 100%) !important;
+  background: linear-gradient(180deg, rgba(255, 245, 245, 1) 100%) rgba(180, 240, 223, 1) 0% !important;
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.77);
+  border-radius: 4px;
+  color: #17603A;
+}
+
+.infoWTimes {
+  color: #17603A;
+  border-radius: 3px;
+  font-family: verdana;
+  text-align: center;
+  font-size: 12px;
+}
+
+.infoWTimes div {
+  /*	border-bottom:1px solid lightgreen;
+	border-left:1px solid lightgreen;
+	border-right:1px solid lightgreen;*/
+  font-family: verdana;
+  text-align: center;
+  font-size: 12px;
+}
+
+.infoWTimes button {
+  background-color: darkgreen;
+  color: #fff;
+  width: 33% !important;
+}
+.masjid-info-popup-header {
+  text-align: center;
+    padding-bottom: 5px;
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 82% !important;
+    /* margin-left: 15px; */
+}
+
+/* CSP overrides :( */
+.btn-loc{
+  cursor:default
+}
+.btn-loc:hover{
+  color:#ef5350 !important
+}

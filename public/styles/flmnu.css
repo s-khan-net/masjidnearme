@@ -1,0 +1,115 @@
+.flmnu
+{
+	background: -moz-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* ff3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%, #99CCBE), color-stop(100%, #FFFFFF)); /* safari4+,chrome */
+    background: -webkit-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* opera 11.10+ */
+    background: -ms-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* ie10+ */
+    background: linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99CCBE', endColorstr='#FFFFFF',GradientType=1 ); /* ie6-9 */
+	color:#17603A;
+	border-radius:3px;
+	z-index: 1031;
+	border:1px solid #99CCBE;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+    position:absolute;
+    margin-top:12px;
+    box-shadow:0 0 10px #999;
+}
+#flmnuNav{
+	list-style:none;
+	padding:0;
+	margin-top:0px;
+}
+#flmnuNav > ul{
+	margin-top:0px;
+}
+#flmnuNav > li{
+	background-color:lightgreen;
+	padding:1px;
+	margin:2px;
+	border-radius:3px;
+}
+#flmnuNav > li div{
+	cursor:pointer;
+	background: -moz-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* ff3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(0%, #99CCBE), color-stop(100%, #FFFFFF)); /* safari4+,chrome */
+    background: -webkit-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* safari5.1+,chrome10+ */
+    background: -o-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* opera 11.10+ */
+    background: -ms-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* ie10+ */
+    background: linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* w3c */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99CCBE', endColorstr='#FFFFFF',GradientType=1 ); /* ie6-9 */
+    font-weight:500;
+	padding:5px;
+	border-radius:3px;
+	text-shadow: 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+#flmnuNav > li div:hover {
+    text-shadow:0px 3px 4px #999;
+}
+ #flmnuNav > li div:hover > #flmnulnkArr{
+	color: lightgreen;
+}
+.flmnuHeader
+{
+	vertical-align:top;
+	letter-spacing:4px;	
+	margin:0 auto;
+	text-align:center;
+	padding-top:8px;
+	padding-bottom:4px;
+	background-color:inherit;
+	cursor:pointer;
+}
+.flmnuHeader:hover
+{
+	text-shadow:0px 3px 4px #999;
+}
+.flmnuHeader:hover > #toggleIcon
+{
+	text-shadow:3px 3px 4px #999;
+}
+.flmnuTimes
+{
+	display:none;
+	position:absolute;
+	z-index:1032;
+	border:1px solid lightgreen;
+	background: -moz-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* ff3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%, #99CCBE), color-stop(100%, #FFFFFF)); /* safari4+,chrome */
+	background: -webkit-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* safari5.1+,chrome10+ */
+	background: -o-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* opera 11.10+ */
+	background: -ms-linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* ie10+ */
+	background: linear-gradient(0deg, #99CCBE 0%, #FFFFFF 100%); /* w3c */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#99CCBE', endColorstr='#FFFFFF',GradientType=1 ); /* ie6-9 */
+	min-width: 120px;
+	color:#17603A;
+	border-radius: 3px;
+	margin-top: -10px
+}
+.flmnuTimes div
+{
+	
+	text-align:center;
+	padding:1 3 1 3;
+	
+}
+
+.flmnuLeft
+{
+	float:'left';
+}
+.flmnuRight
+{
+	float:'right'
+}
+.bar {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+}
+.glyphicon
+{
+	font-size: 18px;
+}

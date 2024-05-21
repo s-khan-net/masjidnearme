@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]>      <html class="no-js"> <!--<![endif]-->
+<html>
+
+<head>
+    <link rel="icon" type="image/png" href="./assets/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="./assets/images/favicon-16x16.png" sizes="16x16">
+    <meta name="theme-color" content="#ffffff">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>مساجد - For Developers</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="styles/bootstrap-theme.css">
+    <script src="https://code.jquery.com/jquery-3.6.3.min.js"
+        integrity="sha256-pvPw+upLPUjgMXY0G+8O0xUf+/Im1MZjXxxgOcBQBXU=" crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="scripts/script.js" async defer></script> -->
+    <script type="text/javascript" src="scripts/bootstrap.js" async defer></script>
+</head>
+
+<body>
+    <div style="top:0;position:fixed;z-index:1200;left:49%"><img src="assets/images/bismillah.png" alt="Bismillah" />
+    </div>
+    <!-- Navigation -->
+    <div class="navbar navbar-inverse navbar-fixed-top" style="height: 50px;">
+        <div class="container">
+            <div class="navbar-header">
+                <!-- Button for smallest screens -->
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span
+                        class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+                <a class="navbar-brand">
+                    <img src="./assets/images/logo_N.png" />
+                </a>
+            </div>
+            <div class="navbar-collapse collapse" id="mnuCollapse">
+                <ul class="nav navbar-nav pull-right">
+                    <li><a id="btnDev" style="cursor:default" href="/"><span class="glyphicon glyphicon-home"
+                                title="Home" style="margin-top:-2px;"></span></a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </div>
+
+    <div class="container" style="width: 80%;margin-top: 52px;">
+        <div class="row">
+            <div class="col-md-12" role="main">
+                <!--basic usage-->
+                <div class="well" style="margin-top:12px">
+                    <img src="assets/images/logo_N.png" alt="masjid near me" />
+                    <p> Below are a list of things you need to know</p>
+                </div>
+                <div class="well">
+                    When you navigate to <a href="http://masjidnear.me" target=_blank>http://masjidnear.me</a> , you
+                    will be prompted to share your location, <br><br>
+                    <img src="assets/images/help/locprompt.gif" alt="location prompt" />
+                </div>
+                <div class="well">
+                    If you choose to share your location with us, the map that loads, will have a blue marker showing
+                    your current location<br><br>
+                    <img src="assets/images/help/blumarker.gif" alt="blue marker" />
+                </div>
+                <div class="well">
+                    The application gets the masjids nearest to you, shows them as marker(s) on the map and lists them
+                    on the left menu<br><br>
+                    <img src="assets/images/help/menu1.gif" alt="left menu" />
+                </div>
+                <div class="well">
+                    A submenu showing the salaah times of that masjid, will show when you move the pointer on to a
+                    masjid's name<br><br>
+                    <img src="assets/images/help/submenu1.gif" alt="sub menu" />
+                </div>
+                <div class="well">
+                    On clicking one of the masjids from the menu, or clicking the marker itself, will get the details of
+                    the masjid.<br><br>
+                    <img src="assets/images/help/infowbig1.gif" alt="info window" />
+                </div>
+                <div class="well">
+                    On clicking the navigation button (marked in the image below) will show the route from your location
+                    to the masjid<br /><br />
+                    <img src="assets/images/help/showroute.gif" alt="Show route" />
+                </div>
+                <div class="well">
+                    Clicking the reset button (on the bottom right) will load the load the masjids near to
+                    you.<br /><br />
+                    <img src="assets/images/help/refreshbtn.gif" alt="refresh button" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <br /><br />
+</body>
+
+</html>
