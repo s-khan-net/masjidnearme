@@ -1,7 +1,7 @@
 $(document).ready(() => {
     var urlParams = new URLSearchParams(window.location.search);
     var code = urlParams.get('code');
-    var basePath = 'http://localhost:8300/v1/users/'
+    var basePath = 'https://masjidnearme.azurewebsites.net/v1/users/'
     var u = '';
     if (!code || code.length == 0) {
         showErrorState()

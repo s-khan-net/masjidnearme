@@ -1,6 +1,6 @@
 var map
 var markers = [];
-var basePath = 'http://localhost:8300/v1/'
+var basePath = 'https://masjidnearme.azurewebsites.net/v1/'
 var locMarker;
 $(document).ready(function () {
     $('[data-toggle="tooltip"]').tooltip();
