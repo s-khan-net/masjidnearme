@@ -4,6 +4,7 @@
   "description": "masjidnear.me nodejs api",
   "main": "app.js",
   "scripts": {
+    "start": "node app",
     "test": "echo \"Error: no test specified\""
   },
   "keywords": [
