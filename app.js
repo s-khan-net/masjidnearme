@@ -48,19 +48,7 @@ app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, '/public')));
 
 app.get('/', (req, res) => {
-  res.sendFile(`${__dirname}/views/index.html`)
-});
-app.get('/devs', (req, res) => {
   res.sendFile(`${__dirname}/views/devs.html`)
-});
-app.get('/help', (req, res) => {
-  res.sendFile(`${__dirname}/views/help.html`)
-});
-app.get('/verify', (req, res) => {
-  res.sendFile(`${__dirname}/views/verify.html`)
-});
-app.get('/manifest', (req, res) => {
-  res.sendFile(`${__dirname}/views/manifest.json`)
 });
 server.listen(process.env.PORT, function () {
   console.log(`http://localhost:${process.env.PORT}`);
