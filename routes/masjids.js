@@ -17,7 +17,6 @@ router.get("/:lat/:lng/:radius/:limit/:verified?", async (req, res) => {
                 const verifiedMasjids = await masjidService.getVerifiedMasjids(req.params.lat, req.params.lng, req.params.radius, req.params.limit);
                 if (verifiedMasjids.length == 0) return res.status(204).send("No masjids found");
                 if (!verifiedMasjids) return res.status(402).send(`the Masjids with the request parameters could not be found`);
-                res.header('Access-Control-Allow-Origin','*').status(200).send(verifiedMasjids);
             }
             else {
                 let toInsert = [];
