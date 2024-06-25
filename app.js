@@ -26,8 +26,8 @@ var server = require('http').Server(app);
 app.use(express.json());
 
 //cors
-app.use(cors())
-app.options('*', cors())
+// app.use(cors())
+// app.options('*', cors())
 
 // const validConnectSrc = appConfig.isDev ? ['*'] : ["'self'"];
 app.use(helmet.contentSecurityPolicy({
