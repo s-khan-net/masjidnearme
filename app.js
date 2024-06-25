@@ -36,7 +36,10 @@ app.use(helmet.contentSecurityPolicy({
     imgSrc: ["*", 'data:'],
   },
 }));
-app.use(cors())
+const corsOptions = {
+  origin:'*'
+}
+app.use(cors(corsOptions))
 app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use('/v1/masjids', masjids);
