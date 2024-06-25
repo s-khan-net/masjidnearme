@@ -25,6 +25,9 @@ const app = express();
 var server = require('http').Server(app);
 app.use(express.json());
 
+//cors
+app.use(cors())
+
 // const validConnectSrc = appConfig.isDev ? ['*'] : ["'self'"];
 app.use(helmet.contentSecurityPolicy({
   directives: {
@@ -36,10 +39,7 @@ app.use(helmet.contentSecurityPolicy({
     imgSrc: ["*", 'data:'],
   },
 }));
-const corsOptions = {
-  origin:['http://locahost:8100']
-}
-app.use(cors(corsOptions))
+
 app.use(morgan('combined', { stream: accessLogStream }));
 
 app.use('/v1/masjids', masjids);
