@@ -17,12 +17,14 @@ router.get("/:lat/:lng/:radius/:limit/:verified?", async (req, res) => {
                 const verifiedMasjids = await masjidService.getVerifiedMasjids(req.params.lat, req.params.lng, req.params.radius, req.params.limit);
                 if (verifiedMasjids.length == 0) return res.status(204).send("No masjids found");
                 if (!verifiedMasjids) return res.status(402).send(`the Masjids with the request parameters could not be found`);
+                res.status(200).send(verifiedMasjids)
             }
             else {
                 let toInsert = [];
                 const masjids = await masjidService.getMasjids(req.params.lat, req.params.lng, req.params.radius, req.params.limit);
                 // if (masjids.length == 0) return res.status(204).send("No masjids found");
                 if (!masjids) return res.status(402).send(`the Masjids with the request parameters could not be found`);
+                res.status(200).send(masjids)
                 masjids.forEach(element => {
                     if (element._masjidId == "xoxoxo") {
                         element._masjidId = "";
