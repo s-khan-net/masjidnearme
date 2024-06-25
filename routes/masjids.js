@@ -24,7 +24,6 @@ router.get("/:lat/:lng/:radius/:limit/:verified?", async (req, res) => {
                 const masjids = await masjidService.getMasjids(req.params.lat, req.params.lng, req.params.radius, req.params.limit);
                 // if (masjids.length == 0) return res.status(204).send("No masjids found");
                 if (!masjids) return res.status(402).send(`the Masjids with the request parameters could not be found`);
-                res.header('Access-Control-Allow-Origin','*').status(200).send(masjids);
                 masjids.forEach(element => {
                     if (element._masjidId == "xoxoxo") {
                         element._masjidId = "";
