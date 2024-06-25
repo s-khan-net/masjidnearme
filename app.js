@@ -37,7 +37,7 @@ app.use(helmet.contentSecurityPolicy({
   },
 }));
 const corsOptions = {
-  origin:'*'
+  origin:['http://locahost:8100']
 }
 app.use(cors(corsOptions))
 app.use(morgan('combined', { stream: accessLogStream }));
