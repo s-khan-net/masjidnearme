@@ -16,7 +16,7 @@ var accessLogStream = rfs.createStream('access.log', {
   path: path.join(__dirname, 'log')
 })
 
-const uri = process.env.mongoConnection;//'mongodb+srv://jones:jessica@mongo-mlab-db.cjy7i.mongodb.net/vidly?retryWrites=true&w=majority';
+const uri = process.env.mongoConnection;
 mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useUnifiedTopology: true })//process.env.mongoConnection,{useNewUrlParser:true})
   .then(() => console.log('Connected to MongoDB...'))
   .catch(err => console.error('Could not connect to MongoDB...', err));
