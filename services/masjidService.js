@@ -322,7 +322,7 @@ async function getMasjids(lat, lng, rad, limit) {
     let masjids = [];
     if (check) {
         verifiedmasjids.forEach(element => {
-            element.distance = distance(lat, lng, element.masjidLocation.coordinates[1], element.masjidLocation.coordinates[0]);
+            element.Distance = distance(lat, lng, element.masjidLocation.coordinates[1], element.masjidLocation.coordinates[0]);
             if (!element.notMasjid)
                 masjids.push(element);
         });
