@@ -21,7 +21,7 @@ const userSchema = new mongoose.Schema({
     },
     userCreatedOn: { type: Date, default: Date.now() },
     userModifiedOn: { type: Date, default: Date.now() },
-    userModifiedBy: { type: String, default: '' },
+    userModifiedBy: { type: String, default: 'admin@masjidnear.me' },
     googleUser: { type: Boolean, default: false },
     lastLogin: { type: Date, default: null },
     lastIP: { type: String, default: '' },

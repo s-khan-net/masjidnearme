@@ -51,10 +51,10 @@ function sendMail(type, user) {
     }
     let htmlBody = '';
     let header = `<div style="margin-left:12px; margin-top:12px">
-    <div style="padding:12px; text-align:center"><img src="https://masjidnear.me/images/bismillah.png" alt="Bismillah"/></div>
+    <div style="padding:12px; text-align:center"><img src="https://api.masjidnear.me/assets/images/bismillah.png" alt="Bismillah"/></div>
     <div style="border:1px solid #CCC;padding:28px">
     <div style="display:inline-flex">
-    <div><img src="https://masjidnear.me/images/logo.png" alt="masjid near me"/></div>
+    <div><img src="https://masjidnear.me/public/assets/images/logo.png" alt="masjid near me"/></div>
     <div style="font-size:medium; font-weight:bold; padding-left:12px;align-items: flex-end;display: inline-flex;">${headText}</div>
     </div>
        <div>
@@ -70,9 +70,9 @@ function sendMail(type, user) {
        <li style="letter-spacing:1px">Anytime Anywhere</li>
        <li>Please view the complete <a href="https://masjidnear.me/Legal/Home" target="_blank">private policy</a?</li>
        <div style="display: flex;justify-content: space-between;width:20%;margin:0 auto;margin-top:24px">
-        <div><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/images/smnu/y_24X24.png"></a></div>
-        <div style="margin: 0px 12px 0px 12px;"><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/images/smnu/y_24X24.png"></a></div>
-        <div><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/images/smnu/y_24X24.png"></a></div>
+        <div><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
+        <div style="margin: 0px 12px 0px 12px;"><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
+        <div><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
         </div>
         </div>
     </div></div>
