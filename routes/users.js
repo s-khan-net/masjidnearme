@@ -55,11 +55,16 @@ router.post("/", async (req, res) => { //regiser
 });
 router.put("/", auth, async (req, res) => {
     try {
-        user = req.body.user;
-        if (!user._id)
-            res.status(400).json(`{"updated":false, "message":"user could not be updated, please check error details", "details":"User to updated is not defined by the user object sent."}`)
-        const result = await userService.updateUser(user);
-        res.status(200).json(`{"updated":true, "message":"User updated successfully", "details": "User was updated and the details of the User can be checked using v1/users/me"}`);
+        let user = await userService.getUserByEmail(req.body.user.userEmail);
+        if (!user) return res.status(400).send(`{"updated":false, "message":"user could not be updated, please check error details", "details":"User to updated is not defined by the user object sent."}`)
+        let validation = validateUser(req.body.user)
+        if (validation.valid) {
+            const result = await userService.updateUser(req.body.user)
+            res.status(200).send(`{"updated":true, "message":"User updated successfully", "details": "User was updated and the details of the User can be checked using v1/users/me"}`);
+        }
+        else {
+            return res.status(400).send(`{"status": "bad request", "message": "${validation.errorMessage}"}`)
+        }
     }
     catch (e) {
         console.log(e);

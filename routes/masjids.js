@@ -79,7 +79,7 @@ router.put("/", auth, async (req, res) => {
 
         const result = await masjidService.updateMasjid(masjid);
         Logger.info(`Masjid with id ${masjid._id} was updated with new details,  "details": "Masjid was updated and the details of the masjid can be checked using v1/masjids/details/${result.masjidAddress.googlePlaceId}`);
-        res.status(200).send(`{"updated":"OK", "message":"Masjid updated successfully"}`);
+        res.status(200).send(`{"updated":"true", "message":"Masjid updated successfully"}`);
 
         const emailResult = await emailService.sendMail(req.body.type || "updateMasjid", result);
         if (!emailResult) {
@@ -88,7 +88,7 @@ router.put("/", auth, async (req, res) => {
     }
     catch (e) {
         Logger.error(e);
-        res.status(400).send(`{"updated":"Error", "message":"Masjid could not be updated, please check error details", "details":${e}}`)
+        res.status(400).send(`{"updated":"false", "message":"Masjid could not be updated, please check error details", "details":${e}}`)
     }
 })
 
