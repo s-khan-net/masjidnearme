@@ -7,18 +7,18 @@ const emailService = require("../services/emailService");
 const Logger = require("../services/loggerService");
 
 router.get("/me", auth, async (req, res) => {
-    const user = await userService.getUserByUserId(req.user.userId)
-    if (!user) return res.status(402).send(`the User with id:${req.user.userId} could not be found`);
+    const user = await userService.getUserByUserId(req.body.user.userId)
+    if (!user) return res.status(402).send(`{"status": "bad request", "message": "the User with id:${req.body.user.userId} could not be found"}`);
     res.send(user);
 });
 router.get("/id/:id", auth, async (req, res) => {
     const user = await userService.getUserById(req.params.id);
-    if (!user) return res.status(402).send(`the User with id:${req.params.id} could not be found`);
+    if (!user) return res.status(402).send(`{"status": "bad request", "message": "the User with id:${req.params.id} could not be found")`);
     res.send(user);
 });
-router.get("/verify/:verificationCode", async (req, res) => {
-    const user = await userService.getUserByVerificationCode(req.params.verificationCode);
-    if (!user) return res.status(402).send(`The User with id:${req.params.verificationCode} could not be found`);
+router.post("/verify", async (req, res) => {
+    const user = await userService.getUserByVerificationCode(req.body.verificationCode);
+    if (!user) return res.status(402).send(`{"status": "bad request", "message": "The User could not be found"}`);
 
     //update user"s verfiedEmail to true
     Logger.info(`user verified, hence updating the verified email status as true`)
@@ -29,7 +29,9 @@ router.get("/verify/:verificationCode", async (req, res) => {
 
     await userService.updateUser(newUser)
 
-    res.status(200).json(newUser);
+    let token = userService.generateAuthToken(newUser);
+    let encryptedUser = btoa(JSON.stringify(newUser));
+    res.status(200).header("Access-Control-Expose-Headers", "x-auth-token").header('x-auth-token', token).send(`{"status": "OK", "message": "Logged in as ${newUser.userEmail}", "user":${JSON.stringify(newUser)}}`);
 });
 router.post("/", async (req, res) => { //regiser
     let user = await userService.getUserByEmail(req.body.user.userEmail);

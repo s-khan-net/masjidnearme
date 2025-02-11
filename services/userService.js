@@ -11,7 +11,8 @@ async function createUser(user) {
 
         let salt = await bcrypt.genSalt(10);
         user.userPassword = await bcrypt.hash(user.userPassword, salt);
-        user.confirmCode = await bcrypt.hash(user.userPassword, salt);
+        const confirmcode = await bcrypt.hash(`${user.userEmail}${user.userPassword}`, salt);
+        user.confirmCode = await bcrypt.hash(confirmcode, salt);
         Logger.info(`creating new user ${JSON.stringify(user)}`)
         return await User.create(user);
     }
