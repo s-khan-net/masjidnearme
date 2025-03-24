@@ -72,6 +72,25 @@ async function updateUser(user) {
     }
 }
 
+async function deleteUser(user) {
+    try {
+        if (user._id) {
+            const filter = { _id: user._id };
+            const update = { ...user };
+
+            return User.findOneAndDelete(filter, update, {
+                new: true
+            })
+        }
+        else {
+            throw new Error('user _id is not defined');
+        }
+    }
+    catch (e) {
+        Logger.error(`Error occured while deleting user  - ${JSON.stringify(user)}. Error details - ${e}`)
+    }
+}
+
 function generateAuthToken(user) {
     return jwt.sign({ userId: user.userId, userEmail: user.userEmail, type: 'user' }, process.env.jwtKey, { expiresIn: '2h' });
 }
@@ -93,5 +112,6 @@ module.exports = {
     getUserByUserId,
     getUserByVerificationCode,
     updateUser,
+    deleteUser,
     verifyToken
 }

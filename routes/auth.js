@@ -11,10 +11,12 @@ const Logger = require('../services/loggerService');
 //this is the login method
 router.post('/', async (req, res) => {
     try {
+        Logger.info(`logging in user ${JSON.stringify(req.body.user)}`);
         const user = await User.findOne({ userEmail: req.body.user.userEmail });
         if (!user) return res.status(400).send(`{"status": "ERROR", "message": "The user with this email is not present with us.<br>Please validate the entered details."}`);
 
         const valid = await bcrypt.compare(req.body.user.userPassword, user.userPassword);
+        Logger.info(`user from DB -> ${JSON.stringify(user)} and valid result -> ${valid}`);
         if (!valid) return res.status(400).send(`{"status": "ERROR", "message": "The user email and/or Password do not match.<br>Please validate the entered details."}`);
 
         if (!user.verifiedEmail) return res.status(400).send(`{"status": "ERROR", "message": "You have not verified your email. A verificaton email has been sent to ${user.userEmail}. Please use the link sent in the email to verify yourself", "verificationCode":"${user.confirmCode}","userEmail":"${user.userEmail}"}`);

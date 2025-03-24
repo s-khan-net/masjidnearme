@@ -34,11 +34,14 @@ router.post("/verify", async (req, res) => {
     res.status(200).header("Access-Control-Expose-Headers", "x-auth-token").header('x-auth-token', token).send(`{"status": "OK", "message": "Logged in as ${newUser.userEmail}", "user":${JSON.stringify(newUser)}}`);
 });
 router.post("/", async (req, res) => { //regiser
+    Logger.info(`registering new user ${JSON.stringify(req.body.user)}`);
     let user = await userService.getUserByEmail(req.body.user.userEmail);
+    Logger.info(`user from DB ${JSON.stringify(user)}`);
     if (user) return res.status(400).send(`{"status": "bad request", "message": "User already exists"}`);
 
     //validate
     let validation = validateUser(req.body.user)
+    Logger.info(`validation result ${JSON.stringify(validation)}`);
     if (validation.valid) {
         user = await userService.createUser(req.body.user)
     }
@@ -69,6 +72,18 @@ router.put("/", auth, async (req, res) => {
     catch (e) {
         console.log(e);
         res.status(400).json(`{"updated":false, "message":"User could not be updated, please check error details", "details":${result}}`)
+    }
+})
+router.delete("/", auth, async (req, res) => {
+    try {
+        let user = await userService.getUserByEmail(req.body.user.userEmail);
+        if (!user) return res.status(400).send(`{"deleted":false, "message":"user could not be deleted, please check error details", "details":"User to deleted is not defined by the user object sent."}`)
+        const result = await userService.deleteUser(user)
+        res.status(200).send(`{"deleted":true, "message":"User deleted successfully"}`);
+    }
+    catch (e) {
+        console.log(e);
+        res.status(400).json(`{"deleted":false, "message":"User could not be deleted, please check error details", "details":${result}}`)
     }
 })
 
