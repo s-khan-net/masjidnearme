@@ -18,7 +18,7 @@ router.get("/id/:id", auth, async (req, res) => {
 });
 router.post("/verify", async (req, res) => {
     const user = await userService.getUserByVerificationCode(req.body.verificationCode);
-    if (!user) return res.status(402).send(`{"status": "bad request", "message": "The User could not be found"}`);
+    if (!user) return res.send(`{"status": "bad request", "message": "The User could not be found"}`).status(402);
 
     //update user"s verfiedEmail to true
     Logger.info(`user verified, hence updating the verified email status as true`)
@@ -46,7 +46,7 @@ router.post("/", async (req, res) => { //regiser
         user = await userService.createUser(req.body.user)
     }
     else {
-        return res.status(400).send(`{"status": "bad request", "message": "${validation.errorMessage}"}`)
+        return res.send(`{"status": "bad request", "message": "${validation.errorMessage}"}`).status(400)
     }
 
     // let token = user.generateAuthToken();
