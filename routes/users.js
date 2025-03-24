@@ -54,7 +54,7 @@ router.post("/", async (req, res) => { //regiser
 
     //send mail with confirm code
     await emailService.sendMail("verify", user);
-    res.status(200).json(`{"status": "OK", "message": "You have successfully registered with us, please check your email - ${user.userEmail} to verify your email address"}`);
+    res.json(`{"status": "OK", "message": "You have successfully registered with us, please check your email - ${user.userEmail} to verify your email address"}`).status(200);
 });
 router.put("/", auth, async (req, res) => {
     try {
