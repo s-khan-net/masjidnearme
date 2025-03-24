@@ -53,7 +53,9 @@ router.post("/", async (req, res) => { //regiser
     // res.header("x-auth-token", token).send(_.pick(user, ["_id", "userId", "userEmail"]));
 
     //send mail with confirm code
-    await emailService.sendMail("verify", user);
+    Logger.info(`sending email to ${user.userEmail}`)
+    const emailres = await emailService.sendMail("verify", user);
+    Logger.info(`email sending result ${JSON.stringify(emailres)}`);
     res.json(`{"status": "OK", "message": "You have successfully registered with us, please check your email - ${user.userEmail} to verify your email address"}`).status(200);
 });
 router.put("/", auth, async (req, res) => {
