@@ -37,7 +37,7 @@ router.post("/", async (req, res) => { //regiser
     Logger.info(`registering new user ${JSON.stringify(req.body.user)}`);
     let user = await userService.getUserByEmail(req.body.user.userEmail);
     Logger.info(`user from DB ${JSON.stringify(user)}`);
-    if (user) return res.status(400).send(`{"status": "bad request", "message": "User already exists"}`);
+    if (user) return res.send(`{"status": "bad request", "message": "User already exists"}`).status(400);
 
     //validate
     let validation = validateUser(req.body.user)
