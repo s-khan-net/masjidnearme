@@ -31,7 +31,7 @@ router.post("/verify", async (req, res) => {
 
     let token = userService.generateAuthToken(newUser);
     let encryptedUser = btoa(JSON.stringify(newUser));
-    res.status(200).header("Access-Control-Expose-Headers", "x-auth-token").header('x-auth-token', token).send(`{"status": "OK", "message": "Logged in as ${newUser.userEmail}", "user":${JSON.stringify(newUser)}}`);
+    res.header("Access-Control-Expose-Headers", "x-auth-token").header('x-auth-token', token).send(`{"status": "OK", "message": "Logged in as ${newUser.userEmail}", "user":${JSON.stringify(newUser)}}`).status(200);
 });
 router.post("/", async (req, res) => { //regiser
     Logger.info(`registering new user ${JSON.stringify(req.body.user)}`);
@@ -56,7 +56,7 @@ router.post("/", async (req, res) => { //regiser
     Logger.info(`sending email to ${user.userEmail}`)
     const emailres = await emailService.sendMail("verify", user);
     Logger.info(`email sending result ${JSON.stringify(emailres)}`);
-    res.json(`{"status": "OK", "message": "You have successfully registered with us, please check your email - ${user.userEmail} to verify your email address"}`).status(200);
+    res.send(`{"status": "OK", "message": "You have successfully registered with us, please check your email - ${user.userEmail} to verify your email address"}`).status(200);
 });
 router.put("/", auth, async (req, res) => {
     try {
@@ -65,27 +65,27 @@ router.put("/", auth, async (req, res) => {
         let validation = validateUser(req.body.user)
         if (validation.valid) {
             const result = await userService.updateUser(req.body.user)
-            res.status(200).send(`{"updated":true, "message":"User updated successfully", "details": "User was updated and the details of the User can be checked using v1/users/me"}`);
+            res.send(`{"updated":true, "message":"User updated successfully", "details": "User was updated and the details of the User can be checked using v1/users/me"}`).status(200);
         }
         else {
-            return res.status(400).send(`{"status": "bad request", "message": "${validation.errorMessage}"}`)
+            return res.send(`{"status": "bad request", "message": "${validation.errorMessage}"}`).status(400)
         }
     }
     catch (e) {
         console.log(e);
-        res.status(400).json(`{"updated":false, "message":"User could not be updated, please check error details", "details":${result}}`)
+        res.send(`{"updated":false, "message":"User could not be updated, please check error details", "details":${result}}`).status(400)
     }
 })
 router.delete("/", auth, async (req, res) => {
     try {
         let user = await userService.getUserByEmail(req.body.user.userEmail);
-        if (!user) return res.status(400).send(`{"deleted":false, "message":"user could not be deleted, please check error details", "details":"User to deleted is not defined by the user object sent."}`)
+        if (!user) return res.send(`{"deleted":false, "message":"user could not be deleted, please check error details", "details":"User to deleted is not defined by the user object sent."}`).status(400)
         const result = await userService.deleteUser(user)
-        res.status(200).send(`{"deleted":true, "message":"User deleted successfully"}`);
+        res.send(`{"deleted":true, "message":"User deleted successfully"}`).status(200);
     }
     catch (e) {
         console.log(e);
-        res.status(400).json(`{"deleted":false, "message":"User could not be deleted, please check error details", "details":${result}}`)
+        res.send(`{"deleted":false, "message":"User could not be deleted, please check error details", "details":${result}}`).status(400)
     }
 })
 
