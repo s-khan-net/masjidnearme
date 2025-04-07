@@ -9,6 +9,7 @@ const masjids = require('./routes/masjids');
 const salaah = require('./routes/salaah');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
+const feedback = require('./routes/feedback');
 require('dotenv').config();
 
 var accessLogStream = rfs.createStream('access.log', {
@@ -47,6 +48,7 @@ app.use('/v1/masjids', masjids);
 app.use('/v1/salaah', salaah);
 app.use('/v1/users', users);
 app.use('/v1/auth', auth);
+app.use('/v1/feedback', feedback);
 
 app.set('views', __dirname + '/views');
 app.use(express.static(path.join(__dirname, '/public')));
