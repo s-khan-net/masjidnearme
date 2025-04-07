@@ -140,7 +140,7 @@ function sendMail(type, user) {
                 transporter.sendMail(mailOptions, function (error, info) {
                     if (error) {
                         Logger.error(`Error occured while sending email. Error details - ${e}`)
-                        resolve(false)
+                        reject(false)
                     } else {
                         Logger.info(`${type} mail sent to ${user.userEmail || user.masjidModifiedby}. response-: ${info.response}`);
                         resolve(true)
@@ -148,13 +148,13 @@ function sendMail(type, user) {
                 });
             } catch (error) {
                 Logger.error(`Error occured while sending email. Error details - ${error}`)
-                resolve(false)
+                reject(false)
             }
         })
     }
     else {
         return new Promise((resolve, reject) => {
-            resolve(false)
+            reject(false)
         })
     }
 }
