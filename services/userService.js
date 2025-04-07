@@ -76,11 +76,7 @@ async function deleteUser(user) {
     try {
         if (user._id) {
             const filter = { _id: user._id };
-            const update = { ...user };
-
-            return User.findOneAndDelete(filter, update, {
-                new: true
-            })
+            return User.findOneAndDelete(filter)
         }
         else {
             throw new Error('user _id is not defined');

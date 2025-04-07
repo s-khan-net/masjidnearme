@@ -3,6 +3,7 @@ const _ = require("lodash");
 const express = require("express");
 const router = express.Router();
 const userService = require("../services/userService");
+const feedbackService = require("../services/feedbackService");
 const emailService = require("../services/emailService");
 const Logger = require("../services/loggerService");
 
@@ -79,13 +80,20 @@ router.put("/", auth, async (req, res) => {
 router.delete("/", auth, async (req, res) => {
     try {
         let user = await userService.getUserByEmail(req.body.user.userEmail);
-        if (!user) return res.send(`{"deleted":false, "message":"user could not be deleted, please check error details", "details":"User to deleted is not defined by the user object sent."}`).status(400)
+        if (!user) return res.status(400).send(`{"deleted":false, "message":"user could not be deleted, please check error details", "details":"User to deleted is not defined by the user object sent."}`);
+        // await emailService.sendMail("delete", {
+        //     userEmail: user.userEmail,
+        //     message: `Your account with email ${user.userEmail} has been successfully deleted.`,
+        // });
+        const feedbackRes = await feedbackService.saveFeedBack(user.userEmail, "delete", req.body.user.reason);
+        Logger.info(`deleting user -> ${req.body.user.userEmail}`)
         const result = await userService.deleteUser(user)
-        res.send(`{"deleted":true, "message":"User deleted successfully"}`).status(200);
+        if (result) res.status(200).send(`{"deleted":true, "message":"Your user profile has been deleted successfully"}`);
+        else res.status(400).send(`{"deleted":false, "message":"User could not be deleted, please check error details", "details":"Error occured while deleting the user"}`)
     }
     catch (e) {
         console.log(e);
-        res.send(`{"deleted":false, "message":"User could not be deleted, please check error details", "details":${result}}`).status(400)
+        res.status(400).send(`{"deleted":false, "message":"User could not be deleted, please check error details", "details":${result}}`)
     }
 })
 
