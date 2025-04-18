@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
         Logger.info(`user from DB -> ${JSON.stringify(user)} and valid result -> ${valid}`);
         if (!valid) return res.status(400).send(`{"status": "ERROR", "message": "The user email and/or Password do not match. Please validate the entered details."}`);
 
-        if (!user.verifiedEmail) return res.status(400).send(`{"status": "ERROR", "message": "You have not verified your email. A verificaton email has been sent to ${user.userEmail}. Please use the link sent in the email, to verify yourself", "verificationCode":"${user.confirmCode}","userEmail":"${user.userEmail}"}`);
+        if (!user.verifiedEmail) return res.status(400).send(`{"status": "ERROR", "message": "You have not verified your email. A verificaton email has been sent to ${user.userEmail}. Please use the link sent in the email, to verify yourself"}`);
 
         let token = userService.generateAuthToken(user);
         let encryptedUser = btoa(JSON.stringify(user));
