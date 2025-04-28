@@ -88,7 +88,7 @@ async function deleteUser(user) {
 }
 
 function generateAuthToken(user) {
-    return jwt.sign({ userId: user.userId, userEmail: user.userEmail, type: 'user' }, process.env.jwtKey, { expiresIn: '2h' });
+    return jwt.sign({ userId: user.userId, userEmail: user.userEmail, type: 'user' }, process.env.jwtKey, { expiresIn: '2d' });
 }
 function verifyToken(token) {
     try {
