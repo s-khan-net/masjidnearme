@@ -56,6 +56,9 @@ app.use(express.static(path.join(__dirname, '/public')));
 app.get('/', (req, res) => {
   res.sendFile(`${__dirname}/views/devs.html`)
 });
+app.get('/legal', (req, res) => {
+  res.sendFile(`${__dirname}/views/legal.html`)
+});
 server.listen(process.env.PORT, function () {
   console.log(`http://localhost:${process.env.PORT}`);
 });
