@@ -89,7 +89,7 @@ function sendMail(type, user) {
             <p>
             Please use masjid near me to find masjids near your location. You can view the masjids on a map, and also get the details of the masjid, salaah times, and other details.
             </p>
-            <p>You can login to the <a href="https://masjidnear.me" target="_blank">مسجد near me </a> using the email and password you used to register with us.</p>
+            <p>You can login to <a href="https://masjidnear.me" target="_blank">مسجد near me </a> using the email and password you used to register with us.</p>
             <p> Please verify as many masjids as you can and help others and may Allah reward you efforts. &nbsp;Jazakallahu
             khairan</p>
             </div>
