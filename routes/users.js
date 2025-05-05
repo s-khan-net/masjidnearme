@@ -43,7 +43,7 @@ router.post("/", async (req, res) => { //regiser
     Logger.info(`registering new user ${JSON.stringify(req.body.user)}`);
     let user = await userService.getUserByEmail(req.body.user.userEmail);
     Logger.info(`user from DB ${JSON.stringify(user)}`);
-    if (user) return res.send(`{"status": "bad request", "message": "User already exists"}`).status(400);
+    if (user) return res.send(`{"status": "ERROR", "message": "User already exists"}`).status(200);
 
     //validate
     req.body.user.userPassword = atob(req.body.user.userPassword);
@@ -53,7 +53,7 @@ router.post("/", async (req, res) => { //regiser
         user = await userService.createUser(req.body.user)
     }
     else {
-        return res.send(`{"status": "bad request", "message": "${validation.errorMessage}"}`).status(400)
+        return res.send(`{"status": "ERROR", "message": "${validation.errorMessage}"}`).status(200)
     }
 
     // let token = user.generateAuthToken();
