@@ -34,6 +34,9 @@ var mailOptions = {
 function sendMail(type, user) {
     let headText = '';
     switch (type) {
+        case 'welcome':
+            headText = 'Welcome to Masjid Near Me';
+            break;
         case 'verify':
             headText = 'Verify yourself'
             break;
@@ -78,6 +81,37 @@ function sendMail(type, user) {
     </div></div>
     </div>`
     switch (type) {
+        case 'welcome':
+            htmlBody = `${header}
+            <p>Hi ${user.userprofile.firstName},</p>
+            <div>You have successfully registered with us</div>
+            <div>
+            <p>
+            Please use masjid near me to find masjids near your location. You can view the masjids on a map, and also get the details of the masjid, salaah times, and other details.
+            </p>
+            <p> Please verify as many masjids as you can and help others and may Allah reward you efforts. &nbsp;Jazakallahu
+            khairan</p>
+            </div>
+            ${footer}
+            `
+            mailOptions.to = user.userEmail;
+            mailOptions.subject = "Welcome to " + "مسجد" + " near me ";
+            mailOptions.html = htmlBody;
+            break;
+        case 'delete':
+            htmlBody = `${header}
+            <p>Hi ${user.userprofile.firstName},</p>
+            <div>We are sorry to see you go.</div>
+            <div>We have deleted your account with email - ${user.userEmail}</div>
+            <div>The android app and the web app will work as before, but you will not be able to login to the app.</div>
+            <div>Please use the app/web site to find masjids near your location. You can view the masjids on a map, and also get the details of the masjid, salaah times, and other details.</div>
+             ${footer}
+            `
+
+            mailOptions.to = user.userEmail;
+            mailOptions.subject = "مسجد" + " near me  - User Account Deletion ";
+            mailOptions.html = htmlBody;
+            break;
         case 'verify':
             let url = `${process.env.verifyUrl}?code=${user.confirmCode}`
             htmlBody = `${header}
@@ -96,7 +130,7 @@ function sendMail(type, user) {
             break;
         case 'verifyMasjid':
             htmlBody = `${header}
-               <p>Hi There,</p>
+               <p>Hi ${user.userprofile.firstName},</p>
                <div>You have verified </div>
                <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                <p>this will appear on the map of masjid near me and you can add/update the salaah times for this masjid</p>
@@ -109,7 +143,7 @@ function sendMail(type, user) {
             break;
         case 'updateMasjid':
             htmlBody = `${header}
-                <p>Hi There,</p>
+                <p>Hi ${user.userprofile.firstName},</p>
                 <div>You have updated the details of </div>
                 <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                 <p>Insha Allah, this will be helpful for others, and may Allah reward for this action.<br><br>Please continue to do the same<br><br>Jazakumullahu Khair.</p>
@@ -121,7 +155,7 @@ function sendMail(type, user) {
             break;
         case 'editTimes':
             htmlBody = `${header}
-                <p>Hi There,</p>
+                <p>Hi ${user.userprofile.firstName},</p>
                 <div>You have updated the Salaah times of </div>
                 <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                 <p>Insha Allah, this will be helpful for others, and may Allah reward for this action.<br><br>Please continue to do the same<br><br>Jazakumullahu Khair.</p>

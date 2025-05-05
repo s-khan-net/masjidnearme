@@ -32,6 +32,10 @@ router.post("/verify", async (req, res) => {
 
     await userService.updateUser(newUser)
 
+    Logger.info(`sending welcome email to ${user.userEmail}`)
+    const emailres = await emailService.sendMail("welcome", user);
+    Logger.info(`email sending result ${JSON.stringify(emailres)}`);
+
     let token = userService.generateAuthToken(newUser);
     res.header("Access-Control-Expose-Headers", "x-auth-token").header('x-auth-token', token).send(`{"status": "OK", "message": "Logged in as ${newUser.userEmail}", "user":${JSON.stringify(newUser)}}`).status(200);
 });
