@@ -18,8 +18,10 @@ router.get("/id/:id", auth, async (req, res) => {
     res.send(user);
 });
 router.post("/verify", async (req, res) => {
+    Logger.info(`verifying user with verification code ${req.body.verificationCode}`);
+    if (!req.body.verificationCode) return res.send(`{"status": "bad request", "message": "The verification code is not defined"}`).status(400);
     const user = await userService.getUserByVerificationCode(req.body.verificationCode);
-    if (!user) return res.send(`{"status": "bad request", "message": "The User could not be found"}`).status(402);
+    if (!user) return res.send(`{"status": "bad request", "message": "The User could not be found"}`).status(400);
 
     //update user"s verfiedEmail to true
     Logger.info(`user verified, hence updating the verified email status as true`)
@@ -31,7 +33,6 @@ router.post("/verify", async (req, res) => {
     await userService.updateUser(newUser)
 
     let token = userService.generateAuthToken(newUser);
-    let encryptedUser = btoa(JSON.stringify(newUser));
     res.header("Access-Control-Expose-Headers", "x-auth-token").header('x-auth-token', token).send(`{"status": "OK", "message": "Logged in as ${newUser.userEmail}", "user":${JSON.stringify(newUser)}}`).status(200);
 });
 router.post("/", async (req, res) => { //regiser
@@ -41,6 +42,7 @@ router.post("/", async (req, res) => { //regiser
     if (user) return res.send(`{"status": "bad request", "message": "User already exists"}`).status(400);
 
     //validate
+    req.body.user.userPassword = atob(req.body.user.userPassword);
     let validation = validateUser(req.body.user)
     Logger.info(`validation result ${JSON.stringify(validation)}`);
     if (validation.valid) {
