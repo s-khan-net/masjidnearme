@@ -11,7 +11,7 @@ router.get("/:email?", auth, async (req, res) => {
         const feedback = await feedbackService.getFeedbackByUser(req.params['email']);
         if (!feedback) return res.status(402).send(`{"status": "bad request", "message": "the Feedback with id:${req.params.email} could not be found"}`);
         let temp = _.pick(feedback, 'feedbackContent', 'feedbackType');
-        res.status(200).send(`{"status": "OK", "feedback":"${feedback}"}`);
+        res.status(200).send(feedback);
     }
     else {
         //get top 10 feedbacks
