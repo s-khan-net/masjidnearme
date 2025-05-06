@@ -49,6 +49,9 @@ function sendMail(type, user) {
         case 'editTimes':
             headText = `You've edited the salah times of a masjid`
             break;
+        case 'delete':
+            headText = `You're account has been deleted`
+            break;
         default:
             break;
     }

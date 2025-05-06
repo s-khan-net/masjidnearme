@@ -94,6 +94,12 @@ router.delete("/", auth, async (req, res) => {
         const feedbackRes = await feedbackService.saveFeedBack(user.userEmail, "delete", req.body.user.reason);
         Logger.info(`deleting user -> ${req.body.user.userEmail}`)
         const result = await userService.deleteUser(user)
+
+        //send mail with delete
+        Logger.info(`sending deletion email to ${user.userEmail}`)
+        const emailres = await emailService.sendMail("delete", user);
+        Logger.info(`email sending result ${JSON.stringify(emailres)}`);
+        
         if (result) res.status(200).send(`{"deleted":true, "message":"Your user profile has been deleted successfully"}`);
         else res.status(400).send(`{"deleted":false, "message":"User could not be deleted, please check error details", "details":"Error occured while deleting the user"}`)
     }
