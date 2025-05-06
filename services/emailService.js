@@ -83,7 +83,7 @@ function sendMail(type, user) {
     switch (type) {
         case 'welcome':
             htmlBody = `${header}
-            <p>Hi ${user.userprofile.firstName},</p>
+            <p>Hello ${user.userprofile.firstName},</p>
             <div>You have successfully registered with us</div>
             <div>
             <p>
@@ -101,7 +101,7 @@ function sendMail(type, user) {
             break;
         case 'delete':
             htmlBody = `${header}
-            <p>Hi ${user.userprofile.firstName},</p>
+            <p>Hello ${user.userprofile.firstName},</p>
             <div>We are sorry to see you go.</div>
             <div>We have deleted your account with email - ${user.userEmail}</div>
             <div>The android app and the web app will work as before, but you will not be able to login to the app.</div>
@@ -116,7 +116,7 @@ function sendMail(type, user) {
         case 'verify':
             let url = `${process.env.verifyUrl}?code=${user.confirmCode}`
             htmlBody = `${header}
-               <p>Hi ${user.userprofile.firstName},</p>
+               <p>Hello ${user.userprofile.firstName},</p>
                <div>Verify yourself below to sign in to your masjidnear.me account for </div>
                <div style="margin-top:12px;margin-bottom:12px;color:#013220;text-decoration:underline">${user.userEmail}</div>
                <div style="padding:7px; background:#04AA6D;width:120px;text-align:center;border-radius:4px"><a href="${url}" style="color:#FFF;text-decoration:none;font-weight:bold">verify me</a></div>
@@ -131,7 +131,7 @@ function sendMail(type, user) {
             break;
         case 'verifyMasjid':
             htmlBody = `${header}
-               <p>Hi ${user.userprofile.firstName},</p>
+               <p>Hello ${user.userprofile.firstName},</p>
                <div>You have verified </div>
                <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                <p>this will appear on the map of masjid near me and you can add/update the salaah times for this masjid</p>
@@ -144,7 +144,7 @@ function sendMail(type, user) {
             break;
         case 'updateMasjid':
             htmlBody = `${header}
-                <p>Hi ${user.userprofile.firstName},</p>
+                <p>Hello ${user.userprofile.firstName},</p>
                 <div>You have updated the details of </div>
                 <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                 <p>Insha Allah, this will be helpful for others, and may Allah reward for this action.<br><br>Please continue to do the same<br><br>Jazakumullahu Khair.</p>
@@ -156,7 +156,7 @@ function sendMail(type, user) {
             break;
         case 'editTimes':
             htmlBody = `${header}
-                <p>Hi ${user.userprofile.firstName},</p>
+                <p>Hello ${user.userprofile.firstName},</p>
                 <div>You have updated the Salaah times of </div>
                 <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                 <p>Insha Allah, this will be helpful for others, and may Allah reward for this action.<br><br>Please continue to do the same<br><br>Jazakumullahu Khair.</p>
