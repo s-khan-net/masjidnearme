@@ -4,6 +4,8 @@ const masjidService = require("../services/masjidService");
 const emailService = require("../services/emailService");
 const auth = require("../middleware/auth");
 const Logger = require("../services/loggerService");
+const fs = require("fs");
+const admin = require("../middleware/admin");
 
 router.get("/:lat/:lng/:radius/:limit/:verified?", async (req, res) => {
     try {
@@ -89,6 +91,18 @@ router.put("/", auth, async (req, res) => {
     catch (e) {
         Logger.error(e);
         res.send(`{"updated":"false", "message":"Masjid could not be updated, please check error details", "details":${e}}`).status(400)
+    }
+})
+
+router.get("/logs", admin, async (req, res) => {
+    try {
+        const logFile = fs.readFileSync("./mnm-logs/combined.log", "utf8");
+        const logLines = logFile.split("\n");
+        if (!logLines) return res.status(402).send(`No Logs found`);
+        res.send(JSON.stringify(logLines)).status(200);
+    }
+    catch (e) {
+        res.send(`Error occured while retreiving details for masjid ${e}`).status(500);
     }
 })
 
