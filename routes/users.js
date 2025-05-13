@@ -87,10 +87,6 @@ router.delete("/", auth, async (req, res) => {
     try {
         let user = await userService.getUserByEmail(req.body.user.userEmail);
         if (!user) return res.status(400).send(`{"deleted":false, "message":"user could not be deleted, please check error details", "details":"User to deleted is not defined by the user object sent."}`);
-        // await emailService.sendMail("delete", {
-        //     userEmail: user.userEmail,
-        //     message: `Your account with email ${user.userEmail} has been successfully deleted.`,
-        // });
         const feedbackRes = await feedbackService.saveFeedBack(user.userEmail, "delete", req.body.user.reason);
         Logger.info(`deleting user -> ${req.body.user.userEmail}`)
         const result = await userService.deleteUser(user)

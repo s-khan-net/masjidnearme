@@ -15,11 +15,11 @@ router.post('/', async (req, res) => {
         const user = await User.findOne({ userEmail: req.body.user.userEmail });
         if (!user) return res.status(200).send(`{"status": "ERROR", "message": "The user with this email is not present with us. Please validate the entered details."}`);
         const valid = await bcrypt.compare(atob(req.body.user.userPassword), user.userPassword);
-        Logger.info(`Comparing user password result -> ${valid}`);
+
         if (!valid) return res.status(200).send(`{"status": "ERROR", "message": "The user email and/or Password do not match. Please validate the entered details."}`);
 
         if (!user.verifiedEmail) return res.status(200).send(`{"status": "ERROR", "message": "You have not verified your email. A verificaton email has been sent to ${user.userEmail}. Please use the link sent in the email, to verify yourself"}`);
-
+        Logger.info(`User successfully logged in}`);
         let token = userService.generateAuthToken(user);
         res.status(200).header("Access-Control-Expose-Headers", "x-auth-token").header('x-auth-token', token).send(`{"status": "OK", "message": "Logged in as ${user.userEmail}", "user":${JSON.stringify(user)}}`);
     }

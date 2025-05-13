@@ -10,7 +10,6 @@ router.get("/:email?", auth, async (req, res) => {
     if (req.params.email) {
         const feedback = await feedbackService.getFeedbackByUser(req.params['email']);
         if (!feedback) return res.status(402).send(`{"status": "bad request", "message": "the Feedback with id:${req.params.email} could not be found"}`);
-        let temp = _.pick(feedback, 'feedbackContent', 'feedbackType');
         res.status(200).send(feedback);
     }
     else {
@@ -22,7 +21,7 @@ router.get("/:email?", auth, async (req, res) => {
 })
 
 router.post("/", auth, async (req, res) => {
-    Logger.info(`adding feedback ${JSON.stringify(req.body.feedback)}`);
+    Logger.info(`adding feedback ${JSON.stringify(req.body.user.userEmail)}`);
     let feedback = await feedbackService.saveFeedBack(req.body.user.userEmail, req.body.user.feedbackType, req.body.user.feedbackContent);
     if (!feedback) return res.status(402).send(`{"status": "bad request", "message": "the Feedback with id:${req.body.user.userId} could not be saved"}`);
     if (req.body.user.feedbackContent == 'permission') {

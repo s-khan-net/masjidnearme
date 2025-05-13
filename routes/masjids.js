@@ -14,7 +14,7 @@ router.get("/:lat/:lng/:radius/:limit/:verified?", async (req, res) => {
             return res.send(`the request does not contain latitude and/or longitude values`).status(402);
         }
         else {
-            Logger.info(`/:lat/:lng/:radius/:limit/:verified /:${req.params.lat}/:${req.params.lng}/:${req.params.radius}/:${req.params.limit}/:${req.params.verified}`)
+            //Logger.info(`/:lat/:lng/:radius/:limit/:verified /:${req.params.lat}/:${req.params.lng}/:${req.params.radius}/:${req.params.limit}/:${req.params.verified}`)
             if (req.params.verified) {
                 const verifiedMasjids = await masjidService.getVerifiedMasjids(req.params.lat, req.params.lng, req.params.radius, req.params.limit);
                 if (verifiedMasjids.length == 0) return res.status(204).send("No masjids found");
