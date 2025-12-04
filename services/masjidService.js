@@ -11,7 +11,7 @@ async function checkIfCoordinatesAvaillable(lat, lng, rad) {
     let res = false
     try {
         let d = new Date();
-        d.setDate(d.getDate() - 25);
+        d.setDate(d.getDate() - 45);
         let filter = {
             $and:
                 [{
@@ -320,7 +320,7 @@ async function getMasjids(lat, lng, rad, limit) {
     var verifiedmasjids = await getVerifiedMasjids(lat, lng, rad, limit);
     const check = await checkIfCoordinatesAvaillable(lat, lng)
     let masjids = [];
-    if (verifiedmasjids && verifiedmasjids.length > 0) {
+    if (check && verifiedmasjids && verifiedmasjids.length > 0) {
         verifiedmasjids.forEach(element => {
             element.Distance = distance(lat, lng, element.masjidLocation.coordinates[1], element.masjidLocation.coordinates[0]);
             if (!element.notMasjid)
