@@ -1,6 +1,6 @@
 const nodemailer = require("nodemailer");
 const Logger = require('./loggerService');
-
+const userService = require('./userService');
 let transporter = nodemailer.createTransport({
     host: 'mail.masjidnear.me',
     port: 25,
@@ -76,7 +76,7 @@ function sendMail(type, user) {
        <li style="letter-spacing:1px">Anytime Anywhere</li>
        <li>Find the <a href="https://api.masjidnear.me/legal" target="_blank">private policy</a?</li>
        <div style="display: flex;justify-content: space-between;width:20%;margin:0 auto;margin-top:24px">
-        <div><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
+        <div><a href="https://www.youtube.com/@masjidnearme" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
         <div style="margin: 0px 12px 0px 12px;"><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
         <div><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
         </div>

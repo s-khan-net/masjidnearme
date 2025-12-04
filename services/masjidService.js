@@ -17,7 +17,7 @@ async function checkIfCoordinatesAvaillable(lat, lng, rad) {
                 [{
                     hitLocation: {
                         $near: {
-                            $maxDistance: rad || 300,
+                            $maxDistance: rad || 1000,
                             $geometry: {
                                 type: "Point",
                                 coordinates: [lng, lat]
@@ -95,7 +95,7 @@ async function insertNewHit(lat, lng) {
     }
 }
 
-async function getRadarMasjids(lat, lng, rad, limit) {
+async function  getRadarMasjids(lat, lng, rad, limit) {
     var apikey = process.env.googleApiKey;
     var Uri = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${rad}&type=mosque&key=${apikey}`;
     Logger.info(`in radar call with url- ${Uri}`);
@@ -106,7 +106,7 @@ async function getRadarMasjids(lat, lng, rad, limit) {
         let resObj = JSON.parse(response.body);
         if (resObj['results'].length == 0) {
             Logger.error(`recieved error form places api with url - ${uri}, And error message - ${resObj['error_message']}`)
-            throw new Error(resObj['error_message']);
+            throw new Error(resObj['status']);
         }
         var masjids = [];
         resObj['results'].forEach(element => {
@@ -320,7 +320,7 @@ async function getMasjids(lat, lng, rad, limit) {
     var verifiedmasjids = await getVerifiedMasjids(lat, lng, rad, limit);
     const check = await checkIfCoordinatesAvaillable(lat, lng)
     let masjids = [];
-    if (check) {
+    if (verifiedmasjids && verifiedmasjids.length > 0) {
         verifiedmasjids.forEach(element => {
             element.Distance = distance(lat, lng, element.masjidLocation.coordinates[1], element.masjidLocation.coordinates[0]);
             if (!element.notMasjid)

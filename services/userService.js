@@ -101,6 +101,17 @@ function verifyToken(token) {
     }
 }
 
+function encryptCode(code,pwd) {
+    code = `${Date.now()}~${code}`;
+    if (pwd) {
+        code = `${code}~pwd`;
+    }
+    return Buffer.from(code).toString('base64');
+}
+function decryptCode(code) {
+    return Buffer.from(code, 'base64').toString('ascii');
+}
+
 module.exports = {
     createUser,
     generateAuthToken,
@@ -109,5 +120,7 @@ module.exports = {
     getUserByVerificationCode,
     updateUser,
     deleteUser,
-    verifyToken
+    verifyToken,
+    encryptCode,
+    decryptCode
 }
