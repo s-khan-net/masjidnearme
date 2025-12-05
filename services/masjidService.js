@@ -17,7 +17,7 @@ async function checkIfCoordinatesAvaillable(lat, lng, rad) {
                 [{
                     hitLocation: {
                         $near: {
-                            $maxDistance: rad || 1000,
+                            $maxDistance: 1000,
                             $geometry: {
                                 type: "Point",
                                 coordinates: [lng, lat]
@@ -29,6 +29,11 @@ async function checkIfCoordinatesAvaillable(lat, lng, rad) {
                     hitOn: {
                         $gte: d
                     }
+                },
+                {
+                    searchRadius: {
+                        $lte: rad
+                    }
                 }]
         }
         const coordinates = await Hit.find(filter);
@@ -36,11 +41,11 @@ async function checkIfCoordinatesAvaillable(lat, lng, rad) {
             Logger.info(`coordinates found - ${JSON.stringify(coordinates)}`)
             await Hit.deleteMany(filter)
             res = true;
-            insertNewHit(lat, lng);
+            insertNewHit(lat, lng, rad);
         }
         else {
             Logger.info(`hits not found, hence inserting new hit - ${lat},${lng} `)
-            insertNewHit(lat, lng);
+            insertNewHit(lat, lng , rad);
             res = false;
         }
         return res;
@@ -78,7 +83,7 @@ function calcDays(d1, d2) {
 
     return total_days;
 }
-async function insertNewHit(lat, lng) {
+async function insertNewHit(lat, lng, rad) {
     try {
         const hit = new Hit({
             hitLocation: {
@@ -86,7 +91,8 @@ async function insertNewHit(lat, lng) {
                 coordinates: [Number(lng), Number(lat)]
             },
             hitOn: Date.now(),
-            ip: ''
+            ip: '',
+            searchRadius: rad
         });
         await Hit.create(hit);
     }
@@ -95,7 +101,7 @@ async function insertNewHit(lat, lng) {
     }
 }
 
-async function  getRadarMasjids(lat, lng, rad, limit) {
+async function getRadarMasjids(lat, lng, rad, limit) {
     var apikey = process.env.googleApiKey;
     var Uri = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${lat},${lng}&radius=${rad}&type=mosque&key=${apikey}`;
     Logger.info(`in radar call with url- ${Uri}`);
@@ -318,7 +324,7 @@ async function getMasjidsByMasjidName(name) {
 }
 async function getMasjids(lat, lng, rad, limit) {
     var verifiedmasjids = await getVerifiedMasjids(lat, lng, rad, limit);
-    const check = await checkIfCoordinatesAvaillable(lat, lng)
+    const check = await checkIfCoordinatesAvaillable(lat, lng, rad);
     let masjids = [];
     if (check && verifiedmasjids && verifiedmasjids.length > 0) {
         verifiedmasjids.forEach(element => {

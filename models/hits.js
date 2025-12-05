@@ -7,6 +7,7 @@ const hitsSchema = new mongoose.Schema({
     },
     hitOn: { type: Date },
     ip: { type: String },
+    searchRadius: { type: Number }
 });
 
 hitsSchema.index({ hitLocation: "2dsphere" });
