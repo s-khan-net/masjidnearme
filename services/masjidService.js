@@ -29,23 +29,24 @@ async function checkIfCoordinatesAvaillable(lat, lng, rad) {
                     hitOn: {
                         $gte: d
                     }
-                },
-                {
-                    searchRadius: {
-                        $lte: rad
-                    }
                 }]
         }
         const coordinates = await Hit.find(filter);
         if (coordinates && coordinates.length > 0) {
-            Logger.info(`coordinates found - ${JSON.stringify(coordinates)}`)
-            await Hit.deleteMany(filter)
-            res = true;
-            insertNewHit(lat, lng, rad);
+            if (coordinates[0].searchRadius && coordinates[0].searchRadius >= rad) {
+                Logger.info(`coordinates found with sufficient search radius - ${JSON.stringify(coordinates)}`)
+                res = true;
+            }
+            else {
+                Logger.info(`coordinates found but with insufficient search radius - ${JSON.stringify(coordinates)}`)
+                res = false;
+                await Hit.deleteMany(filter)
+                insertNewHit(lat, lng, rad);
+            }
         }
         else {
             Logger.info(`hits not found, hence inserting new hit - ${lat},${lng} `)
-            insertNewHit(lat, lng , rad);
+            insertNewHit(lat, lng, rad);
             res = false;
         }
         return res;
@@ -326,7 +327,7 @@ async function getMasjids(lat, lng, rad, limit) {
     var verifiedmasjids = await getVerifiedMasjids(lat, lng, rad, limit);
     const check = await checkIfCoordinatesAvaillable(lat, lng, rad);
     let masjids = [];
-    if (check && verifiedmasjids && verifiedmasjids.length > 0) {
+    if (check) {
         verifiedmasjids.forEach(element => {
             element.Distance = distance(lat, lng, element.masjidLocation.coordinates[1], element.masjidLocation.coordinates[0]);
             if (!element.notMasjid)
