@@ -11,13 +11,14 @@ async function checkIfCoordinatesAvaillable(lat, lng, rad) {
     let res = false
     try {
         let d = new Date();
-        d.setDate(d.getDate() - 45);
+        /**6 months */
+        d.setDate(d.getDate() - 180);
         let filter = {
             $and:
                 [{
                     hitLocation: {
                         $near: {
-                            $maxDistance: 1000,
+                            $maxDistance: rad || 2000,
                             $geometry: {
                                 type: "Point",
                                 coordinates: [lng, lat]

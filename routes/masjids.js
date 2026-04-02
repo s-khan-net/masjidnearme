@@ -35,6 +35,7 @@ router.get("/:lat/:lng/:radius/:limit/:verified?", async (req, res) => {
                     }
                 });
                 if (toInsert.length > 0) {
+                    Logger.info(`${toInsert.length} masjids to be inserted in the database, the details of the masjids can be checked using v1/masjids/search?googlePlaceId=${toInsert[0].masjidAddress.googlePlaceId}`)
                     await masjidService.addMasjids(toInsert)
                 }
             }
