@@ -142,7 +142,7 @@ function sendMail(type, user) {
                ${footer}`
 
             mailOptions.to = user.masjidModifiedby;
-            mailOptions.subject = "مسجد" + " near me  - User Verification ";
+            mailOptions.subject = "مسجد" + " near me  - Masjid Verification ";
             mailOptions.html = htmlBody;
             break;
         case 'updateMasjid':
@@ -154,7 +154,7 @@ function sendMail(type, user) {
                 ${footer}`
 
             mailOptions.to = user.masjidModifiedby;
-            mailOptions.subject = "مسجد" + " near me  - User Verification ";
+            mailOptions.subject = "مسجد" + " near me  - Masjid update confirmation ";
             mailOptions.html = htmlBody;
             break;
         case 'editTimes':
@@ -166,7 +166,7 @@ function sendMail(type, user) {
                 ${footer}`
 
             mailOptions.to = user.masjidModifiedby;
-            mailOptions.subject = "مسجد" + " near me  - User Verification ";
+            mailOptions.subject = "مسجد" + " near me  - Masjid update confirmation ";
             mailOptions.html = htmlBody;
             break;
         default:

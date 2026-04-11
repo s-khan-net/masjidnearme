@@ -467,7 +467,7 @@ async function searchMasjidByPlaceId(place_id) {
         return await Masjid.findOne({ "masjidAddress.googlePlaceId": place_id });
     }
     catch (e) {
-        Logger.error(`Error occured while getting user with user email - ${email} in getUserByEmail. Error details - ${e}`)
+        Logger.error(`Error occured while getting masjid details using the placeId - ${place_id}. Error details - ${e}`)
         return null;
     }
 }
