@@ -19,6 +19,12 @@ const userSchema = new mongoose.Schema({
         roleName: { type: String, default: 'default' },
         roleDescription: { type: String, default: 'default' },
     },
+    myMasjids: {
+        type: [{
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Masjid'
+        }], default: []
+    },
     userCreatedOn: { type: Date, default: Date.now() },
     userModifiedOn: { type: Date, default: Date.now() },
     userModifiedBy: { type: String, default: 'admin@masjidnear.me' },

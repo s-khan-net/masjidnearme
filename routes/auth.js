@@ -12,7 +12,7 @@ const Logger = require('../services/loggerService');
 router.post('/', async (req, res) => {
     try {
         Logger.info(`logging in user ${JSON.stringify(req.body.user)}`);
-        const user = await User.findOne({ userEmail: req.body.user.userEmail });
+        const user = await User.findOne({ userEmail: req.body.user.userEmail }).populate('myMasjids');
         if (!user) return res.status(200).send(`{"status": "ERROR", "message": "The user with this email is not present with us. Please validate the entered details."}`);
         const valid = await bcrypt.compare(atob(req.body.user.userPassword), user.userPassword);
 
