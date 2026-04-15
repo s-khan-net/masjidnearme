@@ -113,7 +113,7 @@ function sendMail(type, user) {
             `
 
             mailOptions.to = user.userEmail;
-            mailOptions.subject = "مسجد" + " near me  - User Account Deletion ";
+            mailOptions.subject = "Masjid near me - User Account Deletion ";
             mailOptions.html = htmlBody;
             break;
         case 'verify':
@@ -129,7 +129,7 @@ function sendMail(type, user) {
             `
 
             mailOptions.to = user.userEmail;
-            mailOptions.subject = "مسجد" + " near me  - User Verification ";
+            mailOptions.subject = "Masjid near me  - User Verification ";
             mailOptions.html = htmlBody;
             break;
         case 'verifyMasjid':
@@ -142,7 +142,7 @@ function sendMail(type, user) {
                ${footer}`
 
             mailOptions.to = user.masjidModifiedby;
-            mailOptions.subject = "مسجد" + " near me  - Masjid Verification ";
+            mailOptions.subject = "Masjid near me  - Masjid Verification ";
             mailOptions.html = htmlBody;
             break;
         case 'updateMasjid':
@@ -154,7 +154,7 @@ function sendMail(type, user) {
                 ${footer}`
 
             mailOptions.to = user.masjidModifiedby;
-            mailOptions.subject = "مسجد" + " near me  - Masjid update confirmation ";
+            mailOptions.subject = " "+"مسجد" + " near me  - Masjid update confirmation ";
             mailOptions.html = htmlBody;
             break;
         case 'editTimes':
@@ -166,7 +166,7 @@ function sendMail(type, user) {
                 ${footer}`
 
             mailOptions.to = user.masjidModifiedby;
-            mailOptions.subject = "مسجد" + " near me  - Masjid update confirmation ";
+            mailOptions.subject = "Masjid near me  - Masjid update confirmation ";
             mailOptions.html = htmlBody;
             break;
         default:

@@ -45,6 +45,12 @@ router.post("/", async (req, res) => { //regiser
     Logger.info(`user from DB ${JSON.stringify(user)}`);
     if (user) return res.send(`{"status": "ERROR", "message": "User already exists"}`).status(200);
 
+    if(!req.body.user.userprofile.firstName) {
+        req.body.user.userprofile.firstName = req.body.user.userEmail.split("@")[0];
+    }
+    if(!req.body.user.userprofile.lastName) {
+        req.body.user.userprofile.lastName = ".";
+    }
     //validate
     req.body.user.userPassword = atob(req.body.user.userPassword);
     let validation = validateUser(req.body.user)
