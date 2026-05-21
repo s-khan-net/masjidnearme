@@ -290,6 +290,18 @@ async function getSearchMasjids(query) {
                 res.message = `Got ${res.masjids.length} masjids for the search query`
             }
         }
+        else if (query.txt) {
+            if (query.txt?.length > 0) {
+                res.masjids = await getMasjidsByTextSearch(query.txt, query.startsWith)
+                res.metaData = `{txt:${query.txt}}`
+            }
+            if (res.masjids.length == 0) {
+                res.message = 'Could not retrive masjids for the search query'
+            }
+            else {
+                res.message = `Got ${res.masjids.length} masjids for the search query`
+            }
+        }
     } catch (e) {
         res.metaData = '';
         res.masjids = [];
@@ -298,6 +310,77 @@ async function getSearchMasjids(query) {
     }
     finally {
         return res
+    }
+}
+async function getMasjidsByTextSearch(txt, startsWith = false) {
+    try {
+        Logger.info(`retreiving verified masjids called with text search-${txt}`)
+        let regex = new RegExp(txt, "i");
+        const res = await Masjid.aggregate([
+            {
+                $match: {
+                    notMasjid: { $ne: true } //choose verified masjids only
+                }
+            },
+            {
+                $addFields: {
+                    matchedAddressFields: {
+                        $map: {
+                            input: {
+                                $filter: {
+                                    input: { $objectToArray: "$masjidAddress" },
+                                    as: "field",
+                                    cond: {
+                                        $and: [
+                                            { $ne: ["$$field.k", "googlePlaceId"] },
+                                            { $ne: ["$$field.k", "description"] },
+                                            { $ne: ["$$field.k", "street"] },
+                                            { $ne: ["$$field.k", "locality"] },
+                                            { $ne: ["$$field.k", "phone"] },
+                                            {
+                                                $regexMatch: {
+                                                    input: { $toString: "$$field.v" },
+                                                    regex: startsWith ? `^${txt}` : txt,
+                                                    options: "i"
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            },
+                            as: "m",
+                            in: {
+                                property: "$$m.k",
+                                value: "$$m.v"
+                            }
+                        }
+                    }
+                }
+            },
+            {
+                $match: {
+                    "matchedAddressFields.0": { $exists: true }
+                }
+            },
+            {
+                $project: {
+                    _id: 0,
+                    masjidAddress: 1,
+                    masjidName: 1,
+                    masjidLocation: 1,
+                    matchedAddressFields: 1
+                }
+            },
+            {
+                $limit: 7 // return only the first 7 matched documents
+            }
+        ])
+        // const verifiedMasjids = await Masjid.find({ $or: [{ 'masjidAddress.zipcode': regex }, { 'masjidAddress.country': regex }, { 'masjidAddress.state': regex }, { 'masjidAddress.city': regex }, { "masjidAddress.locality": regex }], notMasjid: false }, 'masjidName masjidAddress masjidLocation');
+        return res;
+    }
+    catch (e) {
+        Logger.error(`Error occured while getting verified masjids. Error details - ${e}`)
+        return [];
     }
 }
 async function getMasjidsByCity(city) {
