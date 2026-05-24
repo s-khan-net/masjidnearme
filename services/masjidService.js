@@ -292,7 +292,7 @@ async function getSearchMasjids(query) {
         }
         else if (query.txt) {
             if (query.txt?.length > 0) {
-                res.masjids = await getMasjidsByTextSearch(query.txt, query.startsWith)
+                res.masjids = await getMasjidsByTextSearch(query.txt, query.startsWith, query.limit)
                 res.metaData = `{txt:${query.txt}}`
             }
             if (res.masjids.length == 0) {
@@ -312,14 +312,15 @@ async function getSearchMasjids(query) {
         return res
     }
 }
-async function getMasjidsByTextSearch(txt, startsWith = false) {
+async function getMasjidsByTextSearch(txt, startsWith = false, limit = 7) {
     try {
         Logger.info(`retreiving verified masjids called with text search-${txt}`)
         let regex = new RegExp(txt, "i");
+        const limitValue = parseInt(limit) || 7;
         const res = await Masjid.aggregate([
             {
                 $match: {
-                    notMasjid: { $ne: true } //choose verified masjids only
+                    notMasjid: { $ne: true } //choose real mmasjids only
                 }
             },
             {
@@ -334,8 +335,8 @@ async function getMasjidsByTextSearch(txt, startsWith = false) {
                                         $and: [
                                             { $ne: ["$$field.k", "googlePlaceId"] },
                                             { $ne: ["$$field.k", "description"] },
-                                            { $ne: ["$$field.k", "street"] },
-                                            { $ne: ["$$field.k", "locality"] },
+                                            // { $ne: ["$$field.k", "street"] },
+                                            // { $ne: ["$$field.k", "locality"] },
                                             { $ne: ["$$field.k", "phone"] },
                                             {
                                                 $regexMatch: {
@@ -368,11 +369,12 @@ async function getMasjidsByTextSearch(txt, startsWith = false) {
                     masjidAddress: 1,
                     masjidName: 1,
                     masjidLocation: 1,
+                    verified: 1,
                     matchedAddressFields: 1
                 }
             },
             {
-                $limit: 7 // return only the first 7 matched documents
+                $limit: limitValue // return only the limted documents
             }
         ])
         // const verifiedMasjids = await Masjid.find({ $or: [{ 'masjidAddress.zipcode': regex }, { 'masjidAddress.country': regex }, { 'masjidAddress.state': regex }, { 'masjidAddress.city': regex }, { "masjidAddress.locality": regex }], notMasjid: false }, 'masjidName masjidAddress masjidLocation');
