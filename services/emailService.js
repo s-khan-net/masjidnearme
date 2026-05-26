@@ -134,7 +134,7 @@ function sendMail(type, user) {
             break;
         case 'verifyMasjid':
             htmlBody = `${header}
-               <p>Hello ${user.userprofile.firstName},</p>
+               <p>Hello ${user.masjidModifiedby},</p>
                <div>You have verified </div>
                <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                <p>this will appear on the map of masjid near me and you can add/update the salaah times for this masjid</p>
@@ -147,19 +147,19 @@ function sendMail(type, user) {
             break;
         case 'updateMasjid':
             htmlBody = `${header}
-                <p>Hello ${user.userprofile.firstName},</p>
+                <p>Hello ${user.masjidModifiedby},</p>
                 <div>You have updated the details of </div>
                 <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                 <p>Insha Allah, this will be helpful for others, and may Allah reward for this action.<br><br>Please continue to do the same<br><br>Jazakumullahu Khair.</p>
                 ${footer}`
 
             mailOptions.to = user.masjidModifiedby;
-            mailOptions.subject = " "+"مسجد" + " near me  - Masjid update confirmation ";
+            mailOptions.subject = " " + "مسجد" + " near me  - Masjid update confirmation ";
             mailOptions.html = htmlBody;
             break;
         case 'editTimes':
             htmlBody = `${header}
-                <p>Hello ${user.userprofile.firstName},</p>
+                <p>Hello ${user.masjidModifiedby},</p>
                 <div>You have updated the Salaah times of </div>
                 <div style="margin-top:12px;margin-bottom:12px;color:#013220;font-weight: bold; letter-spacing:1px">${user.masjidName}</div>
                 <p>Insha Allah, this will be helpful for others, and may Allah reward for this action.<br><br>Please continue to do the same<br><br>Jazakumullahu Khair.</p>
@@ -197,6 +197,58 @@ function sendMail(type, user) {
     }
 }
 
+function sendFeedbackEmail(email, type, feedback) {
+    let content = '';
+    if(type == 'permission') {
+        content = `<p>You have initiated a request for permissions. We will check the details of the user and grant permissions. Please allow some time for the process. After permissions are granted, you will receive another email confirming the same. If you have any questions, please reply to this email and we will get back to you as soon as possible.</p>`
+    }
+    else {
+        content = `<p>Your feedback has been received. We will review your feedback and take necessary actions. If we need any further details regarding your feedback, we will reach out to you via email. We appreciate you taking the time to share your feedback with us.Jazakallahu Khairan.</p><div style="margin-top:12px;margin-bottom:12px">
+            <div style="font-weight:bold">Feedback Content:</div>
+            <div>${feedback}</div>`
+    }
+    let footer = `<div style="margin-top:12px">
+       <hr>
+    </div>
+    <div style="margin-top:12px;">
+       <ul style="list-style:none;">
+       <li style="line-height:2;font-weight:bold;letter-spacing:1px"><a href="https://masjidnear.me" target="_blank"><img src="https://masjidnear.me/public/assets/images/logo.png" alt="masjid near me"/></a></li>
+       <li style="letter-spacing:1px">Find the nearest Masjid | Find masjids by location</li>
+       <li style="letter-spacing:1px">Anytime Anywhere</li>
+       <li>Find the <a href="https://api.masjidnear.me/legal" target="_blank">private policy</a?</li>
+       <div style="display: flex;justify-content: space-between;width:20%;margin:0 auto;margin-top:24px">
+        <div><a href="https://www.youtube.com/@masjidnearme" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
+        <div style="margin: 0px 12px 0px 12px;"><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
+        <div><a href="https://www.youtube.com/channel/UCtprr8S9fTT5rnZ4_ZF9_eQ" target="_blank"><img src="https://masjidnear.me/public/assets/images/smnu/y_24X24.png"></a></div>
+        </div>
+        </div>
+    </div></div>
+    </div>`
+    let htmlBody = `<div style="margin-left:12px; margin-top:12px">
+    <div style="padding:12px; text-align:center"><img src="https://api.masjidnear.me/assets/images/bismillah.png" alt="Bismillah"/></div>
+    <div style="border:1px solid #CCC;padding:28px">
+    <div style="display:inline-flex">
+    <div style="font-size:medium; font-weight:bold; padding-left:12px;align-items: flex-end;display: inline-flex;">Thank you for your feedback!</div>
+    </div>
+       <div>
+            <hr>
+         </div> 
+           ${content}
+            </div>
+    </div></div>${footer}`
+    mailOptions.to = email;
+    mailOptions.subject = type === "permission" ? "New Permission Request - Masjid Near Me" : "New Feedback Received - Masjid Near Me";
+    mailOptions.html = htmlBody;
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            Logger.error(`Error occured while sending feedback email. Error details - ${error}`)
+        } else {
+            Logger.info(`Feedback email sent to ${email}. response-: ${info.response}`);
+        }
+    });
+}
+
 module.exports = {
-    sendMail
+    sendMail,
+    sendFeedbackEmail
 }

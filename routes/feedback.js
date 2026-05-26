@@ -30,7 +30,11 @@ router.post("/", auth, async (req, res) => {
     else {
         res.status(200).send(`{"status": "OK", "message": "Your Feedback has been sent. Thank you."}`);
     }
-
+    try {
+        emailService.sendFeedbackEmail(req.body.user.userEmail, req.body.user.feedbackType, req.body.user.feedbackContent);
+    } catch (error) {
+        Logger.error(`Error occured while sending feedback email. Error details - ${error}`);
+    }
 })
 
 module.exports = router;
