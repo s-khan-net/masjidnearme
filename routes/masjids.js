@@ -110,6 +110,7 @@ router.get("/logs", admin, async (req, res) => {
 
 router.get("/search", searchLimiter, async (req, res) => {
     try {
+        throw new Error('Search is disabled for now, until further notice')
         const ip = req.socket.remoteAddress;
         Logger.info(`search query called with search url-${req.originalUrl}, from IP:${req.ip}, remoteAddress:${ip}`)
         if (req.originalUrl.indexOf('?') > -1) {
