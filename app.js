@@ -26,10 +26,12 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useUnifi
 const app = express();
 var server = require('http').Server(app);
 app.use(express.json());
-app.use(searchLimiter)
-
 //cors
 app.use(cors())
+app.set("trust proxy", 1)
+app.use(searchLimiter)
+
+
 // app.options('*', cors())
 
 // const validConnectSrc = appConfig.isDev ? ['*'] : ["'self'"];
