@@ -28,8 +28,8 @@ var server = require('http').Server(app);
 app.use(express.json());
 //cors
 app.use(cors())
-app.set("trust proxy", 1)
-app.use(searchLimiter)
+// app.set("trust proxy", 1)
+// app.use(searchLimiter)
 
 
 // app.options('*', cors())
