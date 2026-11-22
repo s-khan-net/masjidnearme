@@ -109,7 +109,8 @@ router.get("/logs", admin, async (req, res) => {
 
 router.get("/search", async (req, res) => {
     try {
-        Logger.info(`search query called with search url-${req.originalUrl}`)
+        const ip = req.socket.remoteAddress;
+        Logger.info(`search query called with search url-${req.originalUrl}, from IP:${req.ip}, remoteAddress:${ip}`)
         if (req.originalUrl.indexOf('?') > -1) {
             const result = await masjidService.getSearchMasjids(req.query);
             const resultToSend = {
