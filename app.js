@@ -10,6 +10,7 @@ const salaah = require('./routes/salaah');
 const users = require('./routes/users');
 const auth = require('./routes/auth');
 const feedback = require('./routes/feedback');
+const { searchLimiter } = require('./middleware/rateLimiters');
 require('dotenv').config();
 
 var accessLogStream = rfs.createStream('access.log', {
@@ -25,6 +26,7 @@ mongoose.connect(uri, { useNewUrlParser: true, useFindAndModify: false, useUnifi
 const app = express();
 var server = require('http').Server(app);
 app.use(express.json());
+app.use(searchLimiter)
 
 //cors
 app.use(cors())

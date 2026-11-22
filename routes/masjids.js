@@ -6,6 +6,7 @@ const auth = require("../middleware/auth");
 const Logger = require("../services/loggerService");
 const fs = require("fs");
 const admin = require("../middleware/admin");
+const { searchLimiter } = require("../middleware/rateLimiters");
 
 router.get("/:lat/:lng/:radius/:limit/:verified?", async (req, res) => {
     try {
@@ -107,7 +108,7 @@ router.get("/logs", admin, async (req, res) => {
     }
 })
 
-router.get("/search", async (req, res) => {
+router.get("/search", searchLimiter, async (req, res) => {
     try {
         const ip = req.socket.remoteAddress;
         Logger.info(`search query called with search url-${req.originalUrl}, from IP:${req.ip}, remoteAddress:${ip}`)
