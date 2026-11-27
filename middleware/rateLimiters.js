@@ -4,9 +4,7 @@ exports.searchLimiter = rateLimit({
     windowMs: 10 * 60 * 1000,
     limit: 10,
     standardHeaders: true,
-    message: {
-        success: false,
-        message: 'Search request limit exceeded, please wait for some time and try again'
-    }
+    statusCode: 403,
+    message: { error: 'Search request limit exceeded, please wait for some time and try again' }
 });
 
