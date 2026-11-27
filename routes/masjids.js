@@ -111,14 +111,14 @@ router.get("/logs", admin, async (req, res) => {
 router.get("/search", searchLimiter, async (req, res) => {
     try {
         const ip = req.socket.remoteAddress;
-        Logger.info(`search query called with search url-${req.originalUrl}, from IP:${req.ip}, remoteAddress:${ip}`)
-        throw new Error('Search is disabled for now, until further notice')
+        Logger.info(`searches query called with search url-${req.originalUrl}, from IP:${req.ip}, remoteAddress:${ip}`)
+        // throw new Error('Search is disabled for now, until further notice')
         if (req.originalUrl.indexOf('?') > -1) {
             const result = await masjidService.getSearchMasjids(req.query);
             const resultToSend = {
-                code:200,
-                status:'OK',
-                data:result
+                code: 200,
+                status: 'OK',
+                data: result
             }
             return res.send(JSON.stringify(resultToSend)).status(200)
         }

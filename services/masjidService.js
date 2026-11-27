@@ -7,7 +7,7 @@ require('dotenv').config()
 
 async function checkIfCoordinatesAvaillable(lat, lng, rad) {
     //check if exact coordinates are available
-    Logger.info(`checking if coordinates - ${lat},${lng} are available`)
+    Logger.info(`checking if coordinates - ${lat},${lng} are available - <a href="https://google.com/search?q=${lat}%2C${lng}" target="_blank">Open in maps</a>`)
     let res = false
     try {
         let d = new Date();
